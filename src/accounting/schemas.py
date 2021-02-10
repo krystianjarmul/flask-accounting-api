@@ -15,3 +15,8 @@ class EmployeeSchema(Schema):
     def validate_name(self, name):
         if not name:
             raise ValidationError('No name was given')
+
+
+class CustomerSchema(Schema):
+    class Meta:
+        fields = ['id', 'name', 'hourly_rate']

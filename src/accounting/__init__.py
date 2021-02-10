@@ -10,5 +10,5 @@ else:
 
 db = SQLAlchemy(app)
 
-from . import routes
+from .routes import employees, customers
 

@@ -1,11 +1,9 @@
 from flask import jsonify, request
 from marshmallow import ValidationError
 
-from . import app, db
-from .models import Employee
-from .schemas import EmployeeSchema
-
-db.create_all()
+from src.accounting import app, db
+from src.accounting.models import Employee
+from src.accounting.schemas import EmployeeSchema
 
 
 @app.route('/employees', methods=['GET'])
