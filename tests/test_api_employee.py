@@ -15,7 +15,7 @@ def add_employee(name):
     return employee.id
 
 
-def test_retrieve_list_of_employees_successful(client):
+def test_retrieve_list_of_employees(client):
     add_employee('Alina Testowska')
     add_employee('Katarzyna Tester')
     add_employee('Teresa Testarossa')
@@ -27,7 +27,7 @@ def test_retrieve_list_of_employees_successful(client):
     assert len(data) == 3
 
 
-def test_retrieve_single_employee_successful(client):
+def test_retrieve_single_employee_successfully(client):
     employee_id = add_employee('Alina Testowska')
 
     res = client.get(detail_url(1))
@@ -45,7 +45,7 @@ def test_retrieve_single_employee_that_not_exists_fails(client):
     assert b"An employee doesn't exist" in res.data
 
 
-def test_create_an_employee_successful(client):
+def test_create_an_employee_successfully(client):
     payload = {
         'name': 'Agata Test'
     }
@@ -70,7 +70,7 @@ def test_create_an_employee_with_invalid_payload_fails(client):
     assert b'No name was given' in res.data
 
 
-def test_partial_update_an_employee_successful(client):
+def test_partial_update_an_employee_successfully(client):
     employee_id = add_employee('Alina Testowa')
     payload = {
         'name': 'Maria Test'
@@ -108,7 +108,7 @@ def test_partial_update_an_employee_that_not_exists_fails(client):
     assert b"An employee doesn't exist" in res.data
 
 
-def test_delete_an_employee_successful(client):
+def test_delete_an_employee_successfully(client):
     employee_id = add_employee('Alina Testowa')
 
     res = client.delete(detail_url(employee_id))

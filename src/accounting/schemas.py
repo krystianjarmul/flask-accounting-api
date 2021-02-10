@@ -1,10 +1,9 @@
 from marshmallow import Schema, fields, validates, ValidationError
 
-from .models import Employee
+from .models import Employee, Customer
 
 
 class EmployeeSchema(Schema):
-    id = fields.Integer()
     name = fields.String(required=True)
 
     class Meta:
@@ -18,5 +17,9 @@ class EmployeeSchema(Schema):
 
 
 class CustomerSchema(Schema):
+    name = fields.String(required=True)
+    hourly_rate = fields.Float(required=True)
+
     class Meta:
+        model = Customer
         fields = ['id', 'name', 'hourly_rate']

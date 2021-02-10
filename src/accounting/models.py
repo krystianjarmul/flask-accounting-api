@@ -14,6 +14,6 @@ class Customer(db.Model):
     name = db.Column(db.String(255))
     hourly_rate = db.Column(db.Float)
 
-    def __init__(self, name: str, hr: float):
+    def __init__(self, name: str, hourly_rate: float):
         self.name = name
-        self.hourly_rate = hr
+        self.hourly_rate = hourly_rate
