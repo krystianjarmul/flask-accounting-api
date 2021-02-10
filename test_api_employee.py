@@ -16,7 +16,7 @@ def add_employee(name):
     return employee.id
 
 
-def test_retrieve_list_of_employees(client):
+def test_retrieve_list_of_employees_successful(client):
     add_employee('Alina Testowska')
     add_employee('Katarzyna Tester')
     add_employee('Teresa Testarossa')
@@ -39,7 +39,7 @@ def test_retrieve_single_employee_successful(client):
     assert data['name'] == 'Alina Testowska'
 
 
-def test_retrieve_single_employee_fails(client):
+def test_retrieve_single_employee_that_not_exists_fails(client):
     res = client.get(detail_url(2))
 
     assert res.status_code == 404
@@ -59,7 +59,7 @@ def test_create_an_employee_successful(client):
     assert data['id'] == 1
 
 
-def test_create_an_employee_with_invalid_payload(client):
+def test_create_an_employee_with_invalid_payload_fails(client):
     payload = {
         'name': ''
     }
@@ -76,6 +76,7 @@ def test_partial_update_an_employee_successful(client):
     payload = {
         'name': 'Maria Test'
     }
+
     res = client.patch(detail_url(employee_id), json=payload)
     data = res.get_json()
 
@@ -84,13 +85,26 @@ def test_partial_update_an_employee_successful(client):
     assert data['id'] == employee_id
 
 
-def test_partial_update_an_employee_with_invalid_payload(client):
+def test_partial_update_an_employee_with_invalid_payload_fails(client):
     employee_id = add_employee('Alina Testowa')
     payload = {
         'name': 12
     }
+
     res = client.patch(detail_url(employee_id), json=payload)
     data = res.get_json()
 
     assert res.status_code == 400
     assert b'Not a valid string' in res.data
+
+
+def test_partial_update_an_employee_that_not_exists_fails(client):
+    payload = {
+        'name': 'Maria Test'
+    }
+
+    res = client.patch(detail_url(5), json=payload)
+
+    assert res.status_code == 404
+    assert b"An employee doesn't exist" in res.data
+
