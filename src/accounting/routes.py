@@ -1,46 +1,14 @@
-from flask import Flask, jsonify, request, abort
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-from marshmallow import Schema, fields, ValidationError, validates
+from flask import jsonify, request
+from marshmallow import ValidationError
 
-# init
-app = Flask(__name__)
+from . import app, db
+from .models import Employee
+from .schemas import EmployeeSchema
 
-if app.config['ENV'] == 'testing':
-    app.config.from_object('config.TestingConfig')
-else:
-    app.config.from_object('config.DevelopmentConfig')
-
-# db
-db = SQLAlchemy(app)
 db.create_all()
 
 
-# models
-class Employee(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-
-    def __init__(self, name: str):
-        self.name = name
-
-
-# serializers
-class EmployeeSchema(Schema):
-    id = fields.Integer()
-    name = fields.String(required=True)
-
-    class Meta:
-        model = Employee
-
-    @validates('name')
-    def validate_name(self, name):
-        if not name:
-            raise ValidationError('No name was given')
-
-
-# routes / views
-@app.route('/employees/', methods=['GET'])
+@app.route('/employees', methods=['GET'])
 def list_employee():
     employees = Employee.query.all()
     employees_schema = EmployeeSchema(many=True)
@@ -62,13 +30,15 @@ def retrieve_employee(pk):
     return result, 200
 
 
-@app.route('/employees/', methods=['POST'])
+@app.route('/employees', methods=['POST'])
 def create_employee():
     employee_schema = EmployeeSchema()
+
     try:
         employee_schema.load(request.json)
 
     except ValidationError as e:
+
         return jsonify({'error': e.messages}), 400
 
     employee = Employee(**request.json)
@@ -94,6 +64,7 @@ def partial_update_employee(pk):
 
     employee.name = request.json['name']
     db.session.commit()
+
     result = employee_schema.dump(employee)
 
     return result, 200

@@ -1,3 +1,8 @@
+import os
+
+BASEDIR = os.path.abspath(os.path.dirname(__name__))
+
+
 class Config:
     DEBUG = False
     TESTING = False
@@ -8,7 +13,7 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite3'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASEDIR, 'db.sqlite3')
 
 
 class TestingConfig(Config):

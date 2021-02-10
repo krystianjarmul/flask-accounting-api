@@ -1,6 +1,6 @@
 import pytest
 
-from app import db, app
+from src.accounting import app, db
 
 
 @pytest.fixture

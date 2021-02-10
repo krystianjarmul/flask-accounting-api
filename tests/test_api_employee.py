@@ -1,12 +1,11 @@
-import json
+from src.accounting.models import Employee
+from src.accounting import db
 
-from app import app, Employee, db
-
-EMPLOYEE_URL = '/employees/'
+EMPLOYEE_URL = '/employees'
 
 
 def detail_url(employee_id):
-    return f'{EMPLOYEE_URL}{employee_id}'
+    return f'{EMPLOYEE_URL}/{employee_id}'
 
 
 def add_employee(name):
@@ -124,3 +123,4 @@ def test_delete_an_employee_that_not_exists_fails(client):
 
     assert res.status_code == 404
     assert b"An employee doesn't exist" in res.data
+
