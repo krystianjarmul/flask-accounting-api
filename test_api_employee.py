@@ -108,3 +108,19 @@ def test_partial_update_an_employee_that_not_exists_fails(client):
     assert res.status_code == 404
     assert b"An employee doesn't exist" in res.data
 
+
+def test_delete_an_employee_successful(client):
+    employee_id = add_employee('Alina Testowa')
+
+    res = client.delete(detail_url(employee_id))
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['name'] == 'Alina Testowa'
+
+
+def test_delete_an_employee_that_not_exists_fails(client):
+    res = client.delete(detail_url(5))
+
+    assert res.status_code == 404
+    assert b"An employee doesn't exist" in res.data

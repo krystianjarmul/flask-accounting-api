@@ -97,3 +97,18 @@ def partial_update_employee(pk):
     result = employee_schema.dump(employee)
 
     return result, 200
+
+
+@app.route('/employees/<int:pk>', methods=['DELETE'])
+def destroy_employee(pk):
+    employee = Employee.query.get(pk)
+    employee_schema = EmployeeSchema()
+    if employee is None:
+        return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
+
+    db.session.delete(employee)
+    db.session.commit()
+
+    result = employee_schema.dump(employee)
+
+    return result, 200
