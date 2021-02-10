@@ -70,4 +70,7 @@ def test_create_a_customer_with_invalid_payload_fails(client):
     res = client.post(CUSTOMER_URL, json=payload)
 
     assert res.status_code == 400
-    # assert b'' in res.data
+    assert b'Not a valid number' in res.data
+
+
+def

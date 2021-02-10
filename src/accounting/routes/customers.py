@@ -26,7 +26,7 @@ def retrieve_customer(pk):
 
     result = customer_schema.dump(customer)
 
-    return result, 200
+    return jsonify(result), 200
 
 
 @app.route('/customers', methods=['POST'])
@@ -43,5 +43,7 @@ def create_customer():
     db.session.commit()
     result = customer_schema.dump(customer)
 
-    return result, 201
+    return jsonify(result), 201
+
+
 

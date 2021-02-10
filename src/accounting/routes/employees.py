@@ -25,7 +25,7 @@ def retrieve_employee(pk):
 
     result = employee_schema.dump(employee)
 
-    return result, 200
+    return jsonify(result), 200
 
 
 @app.route('/employees', methods=['POST'])
@@ -44,7 +44,7 @@ def create_employee():
     db.session.commit()
     result = employee_schema.dump(employee)
 
-    return result, 201
+    return jsonify(result), 201
 
 
 @app.route('/employees/<int:pk>', methods=['PATCH'])
@@ -65,7 +65,7 @@ def partial_update_employee(pk):
 
     result = employee_schema.dump(employee)
 
-    return result, 200
+    return jsonify(result), 200
 
 
 @app.route('/employees/<int:pk>', methods=['DELETE'])
@@ -80,4 +80,4 @@ def destroy_employee(pk):
 
     result = employee_schema.dump(employee)
 
-    return result, 200
+    return jsonify(result), 200
