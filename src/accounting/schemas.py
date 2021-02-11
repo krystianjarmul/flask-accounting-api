@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, validates, ValidationError
 
-from .models import Employee, Customer
+from .models import Employee, Customer, Job
 
 
 class EmployeeSchema(Schema):
@@ -33,3 +33,11 @@ class CustomerSchema(Schema):
     def validate_hourly_rate(self, hourly_rate):
         if hourly_rate <= 0:
             raise ValidationError('Hourly rate must be a positive number')
+
+
+class JobSchema(Schema):
+    class Meta:
+        model = Job
+        fields = [
+            'id', 'customer', 'employees', 'date', 'start_time', 'hours_number'
+        ]
