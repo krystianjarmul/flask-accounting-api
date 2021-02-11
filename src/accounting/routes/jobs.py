@@ -16,3 +16,14 @@ def list_jobs():
 
     return jsonify(result), 200
 
+
+@app.route('/jobs/<int:pk>', methods=['GET'])
+def retrieve_job(pk):
+    job = Job.query.get(pk)
+    job_schema = JobSchema()
+    if not job:
+        return jsonify({'error': {'detail': "A job doesn't exists"}})
+
+    result = job_schema.dump(job)
+
+    return jsonify(result), 200
