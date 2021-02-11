@@ -1,3 +1,5 @@
+from datetime import date, time
+
 from flask import jsonify, request
 from marshmallow import ValidationError
 
@@ -27,3 +29,30 @@ def retrieve_job(pk):
     result = job_schema.dump(job)
 
     return jsonify(result), 200
+
+
+@app.route('/jobs', methods=['POST'])
+def create_job():
+    job_schema = JobSchema()
+    try:
+        job_schema.load(request.json)
+
+    except ValidationError as e:
+        return jsonify({'error': e.messages}), 400
+
+    date_formatted = date.fromisoformat(request.json.get('date'))
+    start_time_formatted = time.fromisoformat(request.json.get('start_time'))
+
+    job = Job(
+        customer=request.json.get('customer'),
+        employees=request.json.get('employees'),
+        date=date_formatted,
+        start_time=start_time_formatted,
+        hours_number=request.json.get('hours_number'),
+    )
+    db.session.add(job)
+    db.session.commit()
+
+    result = job_schema.dump(job)
+
+    return jsonify(result), 201

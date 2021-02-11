@@ -49,3 +49,39 @@ def test_retrieve_a_single_job_that_not_exists_fails(client):
 
     assert res.status_code == 200
     assert b"A job doesn't exists" in res.data
+
+
+def test_create_a_job_successfully(client):
+    payload = {
+        'customer': 1,
+        'employees': '2,3',
+        'date': '2021-02-02',
+        'start_time': '10:30:00',
+        'hours_number': 1.5,
+    }
+
+    res = client.post(JOBS_URL, json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 201
+    assert data['id'] == 1
+    assert data['customer'] == payload['customer']
+    assert data['employees'] == payload['employees']
+    assert data['date'] == payload['date']
+    assert data['start_time'] == payload['start_time']
+    assert data['hours_number'] == payload['hours_number']
+
+
+def test_create_a_job_with_invalid_payload_fails(client):
+    payload = {
+        'customer': '',
+        'employees': '',
+        'date': '',
+        'start_time': '',
+        'hours_number': '',
+    }
+
+    res = client.post(JOBS_URL, json=payload)
+
+    assert res.status_code == 400
+
