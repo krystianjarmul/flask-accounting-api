@@ -1,25 +1,7 @@
-from datetime import time, date
+from datetime import date, time
 from typing import List
 
-from . import db
-
-
-class Employee(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-
-    def __init__(self, name: str):
-        self.name = name
-
-
-class Customer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    hourly_rate = db.Column(db.Float)
-
-    def __init__(self, name: str, hourly_rate: float):
-        self.name = name
-        self.hourly_rate = hourly_rate
+from .. import db
 
 
 class Job(db.Model):
