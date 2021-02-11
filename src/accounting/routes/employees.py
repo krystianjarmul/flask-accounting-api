@@ -4,6 +4,7 @@ from marshmallow import ValidationError
 from src.accounting import app, db
 from src.accounting.models import Employee
 from src.accounting.schemas import EmployeeSchema
+from src.accounting.utils import update_model
 
 
 @app.route('/employees', methods=['GET'])
@@ -31,6 +32,8 @@ def retrieve_employee(pk):
 @app.route('/employees', methods=['POST'])
 def create_employee():
     employee_schema = EmployeeSchema()
+    if not request.json:
+        return jsonify({'error': {'detail': "No data has been sent"}}), 400
 
     try:
         employee_schema.load(request.json)
@@ -51,8 +54,11 @@ def create_employee():
 def partial_update_employee(pk):
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
-    if employee is None:
+    if not employee:
         return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
+
+    if not request.json:
+        return jsonify({'error': {'detail': "No data has been sent"}}), 400
 
     try:
         employee_schema.load(request.json)
@@ -60,7 +66,7 @@ def partial_update_employee(pk):
     except ValidationError as e:
         return jsonify({'error': e.messages}), 400
 
-    employee.name = request.json['name']
+    update_model(employee, request.json)
     db.session.commit()
 
     result = employee_schema.dump(employee)

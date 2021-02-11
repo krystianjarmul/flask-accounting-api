@@ -61,6 +61,15 @@ def test_create_a_customer_successfully(client):
     assert data['hourly_rate'] == payload['hourly_rate']
 
 
+def test_create_a_customer_with_empty_payload_fails(client):
+    payload = {}
+
+    res = client.post(CUSTOMER_URL, json=payload)
+
+    assert res.status_code == 400
+    assert b'No data has been sent' in res.data
+
+
 def test_create_a_customer_with_invalid_payload_fails(client):
     payload = {
         'name': '',
@@ -73,4 +82,49 @@ def test_create_a_customer_with_invalid_payload_fails(client):
     assert b'Not a valid number' in res.data
 
 
-def
+def test_partial_update_a_customer_successfully(client):
+    customer_id = add_customer('Steven Hawking', 11.5)
+    payload = {
+        'hourly_rate': 12.0
+    }
+
+    res = client.patch(detail_url(customer_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['id'] == customer_id
+    assert data['name'] == 'Steven Hawking'
+    assert data['hourly_rate'] == 12.0
+
+
+def test_partial_update_a_customer_that_not_exists_fails(client):
+    payload = {
+        'hourly_rate': 12.0
+    }
+
+    res = client.patch(detail_url(4), json=payload)
+
+    assert res.status_code == 404
+    assert b"A customer doesn't exist" in res.data
+
+
+def test_partial_update_a_customer_with_invalid_payload_fails(client):
+    customer_id = add_customer('Steven Hawking', 11.50)
+    payload = {
+        'hourly_rate': -3
+    }
+
+    res = client.patch(detail_url(customer_id), json=payload)
+
+    assert res.status_code == 400
+    assert b'Hourly rate must be a positive number' in res.data
+
+
+def test_partial_update_with_empty_payload_fails(client):
+    customer_id = add_customer('Steven Hawking', 11.50)
+    payload = {}
+
+    res = client.patch(detail_url(customer_id), json=payload)
+
+    assert res.status_code == 400
+    assert b'No data has been sent' in res.data

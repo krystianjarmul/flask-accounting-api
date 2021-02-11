@@ -70,6 +70,16 @@ def test_create_an_employee_with_invalid_payload_fails(client):
     assert b'No name was given' in res.data
 
 
+def test_create_an_employee_with_empty_payload_fails(client):
+    payload = {}
+
+    res = client.post(EMPLOYEE_URL, json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 400
+    assert b'No data has been sent' in res.data
+
+
 def test_partial_update_an_employee_successfully(client):
     employee_id = add_employee('Alina Testowa')
     payload = {
