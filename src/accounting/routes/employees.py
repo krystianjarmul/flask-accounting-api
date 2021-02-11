@@ -21,7 +21,7 @@ def list_employee():
 def retrieve_employee(pk):
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
-    if employee is None:
+    if not employee:
         return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
 
     result = employee_schema.dump(employee)
@@ -78,7 +78,7 @@ def partial_update_employee(pk):
 def destroy_employee(pk):
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
-    if employee is None:
+    if not employee:
         return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
 
     db.session.delete(employee)

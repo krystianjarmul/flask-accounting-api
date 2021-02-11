@@ -133,4 +133,3 @@ def test_delete_an_employee_that_not_exists_fails(client):
 
     assert res.status_code == 404
     assert b"An employee doesn't exist" in res.data
-

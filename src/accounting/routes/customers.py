@@ -72,3 +72,18 @@ def partial_update_customer(pk):
     result = customer_schema.dump(customer)
 
     return jsonify(result), 200
+
+
+@app.route('/customers/<int:pk>', methods=['DELETE'])
+def destroy_customer(pk):
+    customer = Customer.query.get(pk)
+    customer_schema = CustomerSchema()
+    if not customer:
+        return jsonify({'error': {'detail': "A customer doesn't exist"}}), 404
+
+    db.session.delete(customer)
+    db.session.commit()
+
+    result = customer_schema.dump(customer)
+
+    return jsonify(result), 200
