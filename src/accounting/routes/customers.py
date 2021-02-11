@@ -54,6 +54,7 @@ def create_customer():
 def partial_update_customer(pk):
     customer = Customer.query.get(pk)
     customer_schema = CustomerSchema()
+
     if not customer:
         return jsonify({'error': {'detail': "A customer doesn't exist"}}), 404
 

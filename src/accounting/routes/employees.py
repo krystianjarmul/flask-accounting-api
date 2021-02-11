@@ -45,6 +45,7 @@ def create_employee():
     employee = Employee(**request.json)
     db.session.add(employee)
     db.session.commit()
+
     result = employee_schema.dump(employee)
 
     return jsonify(result), 201
