@@ -6,7 +6,7 @@ from src.accounting.schemas import CustomerSchema
 
 class JobSchema(Schema):
     customer_id = fields.Integer(required=True)
-    employees = fields.String(required=True)
+    employee_ids = fields.String(required=True)
     date = fields.Date(required=True)
     start_time = fields.Time(required=True)
     hours_number = fields.Float(required=True)
@@ -17,7 +17,7 @@ class JobSchema(Schema):
         fields = [
             'id',
             'customer_id',
-            'employees',
+            'employee_ids',
             'date',
             'start_time',
             'hours_number',

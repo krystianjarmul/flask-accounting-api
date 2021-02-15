@@ -1,6 +1,6 @@
 from datetime import time, date
 
-from tests.helpers import add_job, add_customer
+from tests.helpers import add_job, add_customer, add_employee
 
 JOBS_URL = '/jobs'
 
@@ -22,6 +22,8 @@ def test_retrieve_list_of_jobs(client):
 
 
 def test_retrieve_a_single_job_successfully(client):
+    employee1_id = add_employee('Anna Testowska')
+    employee2_id = add_employee('Maria Tester')
     customer_id = add_customer('Michael Ballack', 12.0)
     job_id = add_job(1, [2, 3], date(2021, 1, 1), time(11, 30), 2.0)
 
@@ -30,8 +32,8 @@ def test_retrieve_a_single_job_successfully(client):
 
     assert res.status_code == 200
     assert data['id'] == job_id
-    assert data['employees'] == '2,3'
     assert data['date'] == '2021-01-01'
+    assert data['employee_ids'] == '2,3'
     assert data['start_time'] == '11:30:00'
     assert data['hours_number'] == 2.0
     assert data['customer'] == {
@@ -56,7 +58,7 @@ def test_retrieve_a_single_job_that_not_exists_fails(client):
 def test_create_a_job_successfully(client):
     payload = {
         'customer_id': 1,
-        'employees': '2,3',
+        'employee_ids': '2,3',
         'date': '2021-02-02',
         'start_time': '10:30:00',
         'hours_number': 1.5,
@@ -68,7 +70,7 @@ def test_create_a_job_successfully(client):
     assert res.status_code == 201
     assert data['id'] == 1
     assert data['customer_id'] == payload['customer_id']
-    assert data['employees'] == payload['employees']
+    assert data['employee_ids'] == payload['employee_ids']
     assert data['date'] == payload['date']
     assert data['start_time'] == payload['start_time']
     assert data['hours_number'] == payload['hours_number']
@@ -77,7 +79,7 @@ def test_create_a_job_successfully(client):
 def test_create_a_job_with_invalid_payload_fails(client):
     payload = {
         'customer_id': '',
-        'employees': '2,3',
+        'employee_ids': '2,3',
         'date': '2021-02-02',
         'start_time': '10:30:00',
         'hours_number': 1.5,
@@ -107,7 +109,7 @@ def test_create_a_job_with_empty_payload_fails(client):
     assert data['messages'] == {
         'customer_id': ['Missing data for required field.'],
         'date': ['Missing data for required field.'],
-        'employees': ['Missing data for required field.'],
+        'employee_ids': ['Missing data for required field.'],
         'hours_number': ['Missing data for required field.'],
         'start_time': ['Missing data for required field.']
     }
@@ -169,7 +171,7 @@ def test_destroy_job_successfully(client):
 
     assert res.status_code == 200
     assert data['id'] == job_id
-    assert data['employees'] == '2,3'
+    assert data['employee_ids'] == '2,3'
     assert data['date'] == '2021-01-01'
     assert data['start_time'] == '11:30:00'
     assert data['hours_number'] == 2.0
