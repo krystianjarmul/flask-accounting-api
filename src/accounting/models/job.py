@@ -6,7 +6,7 @@ from .. import db
 
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    customer = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
     employees = db.Column(db.String)
     date = db.Column(db.Date)
     start_time = db.Column(db.Time)
@@ -14,13 +14,13 @@ class Job(db.Model):
 
     def __init__(
             self,
-            customer: int,
+            customer_id: int,
             employees: List[int],
             date: date,
             start_time: time,
             hours_number: float
     ):
-        self.customer = customer
+        self.customer_id = customer_id
         self._employees = employees
         self.date = date
         self.start_time = start_time

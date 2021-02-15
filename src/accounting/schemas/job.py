@@ -4,7 +4,7 @@ from src.accounting.models import Job
 
 
 class JobSchema(Schema):
-    customer = fields.Integer(required=True)
+    customer_id = fields.Integer(required=True)
     employees = fields.String(required=True)
     date = fields.Date(required=True)
     start_time = fields.Time(required=True)
@@ -13,5 +13,5 @@ class JobSchema(Schema):
     class Meta:
         model = Job
         fields = [
-            'id', 'customer', 'employees', 'date', 'start_time', 'hours_number'
+            'id', 'customer_id', 'employees', 'date', 'start_time', 'hours_number'
         ]
