@@ -11,6 +11,7 @@ from src.accounting.utils import update_person
 # TODO uproscic walidance w schematach, moze flask-marshmallow
 # TODO wyswietlac zagniezdzone modele np. {"customer": {"id": 1, "name": "Hans.}
 # TODO dodac error handling decorators
+# TODO dodac managera do inicjacji bazy danych, testow itp
 
 @app.route('/customers', methods=['GET'])
 def list_customers():

@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, validates, ValidationError
 
 from src.accounting.models import Job
-from src.accounting.schemas import CustomerSchema
+from src.accounting.schemas import CustomerSchema, EmployeeSchema
 
 
 class JobSchema(Schema):
@@ -10,7 +10,9 @@ class JobSchema(Schema):
     date = fields.Date(required=True)
     start_time = fields.Time(required=True)
     hours_number = fields.Float(required=True)
+
     customer = fields.Nested(CustomerSchema)
+    employees = fields.Nested(EmployeeSchema, many=True)
 
     class Meta:
         model = Job
@@ -21,5 +23,6 @@ class JobSchema(Schema):
             'date',
             'start_time',
             'hours_number',
-            'customer'
+            'customer',
+            'employees'
         ]

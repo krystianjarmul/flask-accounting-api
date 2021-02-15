@@ -1,5 +1,7 @@
 from datetime import time, date
 
+from src.accounting import db
+from src.accounting.models import Job, Employee
 from tests.helpers import add_job, add_customer, add_employee
 
 JOBS_URL = '/jobs'
@@ -25,7 +27,7 @@ def test_retrieve_a_single_job_successfully(client):
     employee1_id = add_employee('Anna Testowska')
     employee2_id = add_employee('Maria Tester')
     customer_id = add_customer('Michael Ballack', 12.0)
-    job_id = add_job(1, [2, 3], date(2021, 1, 1), time(11, 30), 2.0)
+    job_id = add_job(1, [1, 2], date(2021, 1, 1), time(11, 30), 2.0)
 
     res = client.get(detail_url(job_id))
     data = res.get_json()
@@ -33,7 +35,7 @@ def test_retrieve_a_single_job_successfully(client):
     assert res.status_code == 200
     assert data['id'] == job_id
     assert data['date'] == '2021-01-01'
-    assert data['employee_ids'] == '2,3'
+    assert data['employee_ids'] == '1,2'
     assert data['start_time'] == '11:30:00'
     assert data['hours_number'] == 2.0
     assert data['customer'] == {
@@ -41,6 +43,10 @@ def test_retrieve_a_single_job_successfully(client):
         'name': 'Michael Ballack',
         'hourly_rate': 12.0
     }
+    assert data['employees'] == [
+        {'id': 1, 'name': 'Anna Testowska'},
+        {'id': 2, 'name': 'Maria Tester'},
+    ]
 
 
 def test_retrieve_a_single_job_that_not_exists_fails(client):
