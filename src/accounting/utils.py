@@ -1,8 +1,23 @@
-from typing import Any
+from typing import Union
+
+from src.accounting.models import Employee, Customer, Job
 
 
-def update_model(instance: Any, data: dict):
-    for attr in instance.__dict__.keys():
+def update_person(person: Union[Employee, Customer], data: dict):
+    for attr in person.__dict__.keys():
         if attr not in data:
             continue
-        setattr(instance, attr, data.get(attr))
+        setattr(person, attr, data.get(attr))
+
+
+def update_job(job: Job, data: dict):
+    for attr in job.__dict__.keys():
+        if attr not in data:
+            continue
+
+        if attr == 'date':
+            setattr(job, attr, date.fromisoformat(data['date']))
+        elif attr == 'start_time':
+            setattr(job, attr, date.fromisoformat(data['start_time']))
+        else:
+            setattr(job, attr, data.get(attr))

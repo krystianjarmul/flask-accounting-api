@@ -6,7 +6,7 @@ from marshmallow import ValidationError
 from src.accounting import app, db
 from src.accounting.models import Job
 from src.accounting.schemas import JobSchema
-from src.accounting.utils import update_model
+from src.accounting.utils import update_person, update_job
 
 
 @app.route('/jobs', methods=['GET'])
@@ -24,7 +24,7 @@ def retrieve_job(pk):
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({'error': {'detail': "A job doesn't exists"}})
+        return jsonify({'error': {'detail': "A job doesn't exists"}}), 404
 
     result = job_schema.dump(job)
 
@@ -56,3 +56,24 @@ def create_job():
     result = job_schema.dump(job)
 
     return jsonify(result), 201
+
+
+@app.route('/jobs/<int:pk>', methods=['PATCH'])
+def partial_update_jobs(pk):
+    job = Job.query.get(pk)
+    job_schema = JobSchema()
+    if not job:
+        return jsonify({'error': {'detail': "A job doesn't exists"}}), 404
+
+    try:
+        job_schema.load(request.json, partial=True)
+
+    except ValidationError as e:
+        return jsonify({'error': e.messages}), 400
+
+    update_job(job, request.json)
+    db.session.commit()
+
+    result = job_schema.dump(job)
+
+    return jsonify(result), 200

@@ -4,7 +4,7 @@ from marshmallow import ValidationError
 from src.accounting import app, db
 from src.accounting.models import Employee
 from src.accounting.schemas import EmployeeSchema
-from src.accounting.utils import update_model
+from src.accounting.utils import update_person
 
 
 @app.route('/employees', methods=['GET'])
@@ -64,7 +64,7 @@ def partial_update_employee(pk):
     except ValidationError as e:
         return jsonify({'error': e.messages}), 400
 
-    update_model(employee, request.json)
+    update_person(employee, request.json)
     db.session.commit()
 
     result = employee_schema.dump(employee)

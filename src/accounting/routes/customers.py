@@ -4,7 +4,7 @@ from marshmallow import ValidationError
 from src.accounting import app, db
 from src.accounting.models import Customer
 from src.accounting.schemas import CustomerSchema
-from src.accounting.utils import update_model
+from src.accounting.utils import update_person
 
 
 @app.route('/customers', methods=['GET'])
@@ -64,7 +64,7 @@ def partial_update_customer(pk):
     except ValidationError as e:
         return jsonify({'error': e.messages}), 400
 
-    update_model(customer, request.json)
+    update_person(customer, request.json)
     db.session.commit()
 
     result = customer_schema.dump(customer)

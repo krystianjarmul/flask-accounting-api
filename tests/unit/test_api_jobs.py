@@ -47,7 +47,7 @@ def test_retrieve_a_single_job_successfully(client):
 def test_retrieve_a_single_job_that_not_exists_fails(client):
     res = client.get(detail_url(2))
 
-    assert res.status_code == 200
+    assert res.status_code == 404
     assert b"A job doesn't exists" in res.data
 
 
@@ -98,3 +98,39 @@ def test_create_a_job_with_empty_payload_fails(client):
     assert res.status_code == 400
     assert b'Missing data for required field' in res.data
 
+
+def test_partial_update_successfully(client):
+    job_id = add_job(1, [2, 3], date(2021, 1, 1), time(11, 30), 2.0)
+    payload = {
+        'hours_number': 1.5,
+    }
+
+    res = client.patch(detail_url(job_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['id'] == job_id
+    assert data['hours_number'] == 1.5
+
+
+def test_partial_update_with_invalid_payload_fails(client):
+    job_id = add_job(1, [2, 3], date(2021, 1, 1), time(11, 30), 2.0)
+    payload = {
+        'date': 2011.1011,
+    }
+
+    res = client.patch(detail_url(job_id), json=payload)
+
+    assert res.status_code == 400
+    assert b'Not a valid date' in res.data
+
+
+def test_partial_update_job_that_not_exists_fails(client):
+    payload = {
+        'customer': 3,
+    }
+
+    res = client.patch(detail_url(3), json=payload)
+
+    assert res.status_code == 404
+    assert b"A job doesn't exist" in res.data
