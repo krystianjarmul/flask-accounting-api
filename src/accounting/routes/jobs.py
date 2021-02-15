@@ -28,7 +28,7 @@ def retrieve_job(pk):
             'error': 'Not Found',
             'status': '404',
             'method': request.method,
-            'message': "A job doesn't exist",
+            'message': "A job doesn't exist.",
             'path': request.path,
         }), 404
 
@@ -44,7 +44,13 @@ def create_job():
         job_schema.load(request.json)
 
     except ValidationError as e:
-        return jsonify({'error': e.messages}), 400
+        return jsonify({
+            'error': 'Bad Request',
+            'status': '400',
+            'method': request.method,
+            'messages': e.messages,
+            'path': request.path,
+        }), 400
 
     date_formatted = date.fromisoformat(request.json['date'])
     start_time_formatted = time.fromisoformat(request.json['start_time'])
@@ -69,13 +75,25 @@ def partial_update_jobs(pk):
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({'error': {'detail': "A job doesn't exists"}}), 404
+        return jsonify({
+            'error': 'Not Found',
+            'status': '404',
+            'method': 'PATCH',
+            'message': "A job doesn't exist.",
+            'path': request.path,
+        }), 404
 
     try:
         job_schema.load(request.json, partial=True)
 
     except ValidationError as e:
-        return jsonify({'error': e.messages}), 400
+        return jsonify({
+            'error': 'Bad Request',
+            'status': '400',
+            'method': request.method,
+            'messages': e.messages,
+            'path': request.path,
+        }), 400
 
     update_job(job, request.json)
     db.session.commit()
@@ -90,7 +108,13 @@ def destroy_job(pk):
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({'error': "A job doesn't exists"}), 404
+        return jsonify({
+            'error': 'Not Found',
+            'status': '404',
+            'method': 'DELETE',
+            'message': "A job doesn't exist.",
+            'path': request.path,
+        }), 404
 
     db.session.delete(job)
     db.session.commit()

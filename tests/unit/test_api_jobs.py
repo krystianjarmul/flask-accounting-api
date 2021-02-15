@@ -52,7 +52,7 @@ def test_retrieve_a_single_job_that_not_exists_fails(client):
     assert data['error'] == 'Not Found'
     assert data['status'] == '404'
     assert data['method'] == 'GET'
-    assert data['message'] == "A job doesn't exist"
+    assert data['message'] == "A job doesn't exist."
     assert data['path'] == "/jobs/2"
 
 
@@ -87,17 +87,34 @@ def test_create_a_job_with_invalid_payload_fails(client):
     }
 
     res = client.post(JOBS_URL, json=payload)
+    data = res.get_json()
 
     assert res.status_code == 400
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'POST'
+    assert data['messages'] == {'customer': ['Not a valid integer.']}
+    assert data['path'] == "/jobs"
 
 
 def test_create_a_job_with_empty_payload_fails(client):
     payload = {}
 
     res = client.post(JOBS_URL, json=payload)
+    data = res.get_json()
 
     assert res.status_code == 400
-    assert b'Missing data for required field' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'POST'
+    assert data['messages'] == {
+        'customer': ['Missing data for required field.'],
+        'date': ['Missing data for required field.'],
+        'employees': ['Missing data for required field.'],
+        'hours_number': ['Missing data for required field.'],
+        'start_time': ['Missing data for required field.']
+    }
+    assert data['path'] == "/jobs"
 
 
 def test_partial_update_successfully(client):
@@ -121,9 +138,14 @@ def test_partial_update_with_invalid_payload_fails(client):
     }
 
     res = client.patch(detail_url(job_id), json=payload)
+    data = res.get_json()
 
     assert res.status_code == 400
-    assert b'Not a valid date' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['messages'] == {'date': ['Not a valid date.']}
+    assert data['path'] == '/jobs/1'
+    assert data['method'] == 'PATCH'
 
 
 def test_partial_update_job_that_not_exists_fails(client):
@@ -132,9 +154,14 @@ def test_partial_update_job_that_not_exists_fails(client):
     }
 
     res = client.patch(detail_url(3), json=payload)
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"A job doesn't exist" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'PATCH'
+    assert data['message'] == "A job doesn't exist."
+    assert data['path'] == "/jobs/3"
 
 
 def test_destroy_job_successfully(client):
@@ -154,6 +181,11 @@ def test_destroy_job_successfully(client):
 
 def test_destroy_job_that_not_exists_fails(client):
     res = client.delete(detail_url(3))
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"A job doesn't exists" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'DELETE'
+    assert data['message'] == "A job doesn't exist."
+    assert data['path'] == "/jobs/3"
