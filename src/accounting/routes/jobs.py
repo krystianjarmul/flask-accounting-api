@@ -111,7 +111,7 @@ def destroy_job(pk):
         return jsonify({
             'error': 'Not Found',
             'status': '404',
-            'method': 'DELETE',
+            'method': request.method,
             'message': "A job doesn't exist.",
             'path': request.path,
         }), 404

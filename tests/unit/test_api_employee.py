@@ -40,9 +40,14 @@ def test_retrieve_single_employee_successfully(client):
 
 def test_retrieve_single_employee_that_not_exists_fails(client):
     res = client.get(detail_url(2))
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"An employee doesn't exist" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'GET'
+    assert data['message'] == "An employee doesn't exist."
+    assert data['path'] == "/employees/2"
 
 
 def test_create_an_employee_successfully(client):
@@ -67,7 +72,11 @@ def test_create_an_employee_with_invalid_payload_fails(client):
     data = res.get_json()
 
     assert res.status_code == 400
-    assert b'Not a valid string' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'POST'
+    assert data['messages'] == {'name': ['Not a valid string.']}
+    assert data['path'] == '/employees'
 
 
 def test_create_an_employee_with_empty_payload_fails(client):
@@ -77,7 +86,11 @@ def test_create_an_employee_with_empty_payload_fails(client):
     data = res.get_json()
 
     assert res.status_code == 400
-    assert b'No data has been sent' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'POST'
+    assert data['messages'] == {'name': ['Missing data for required field.']}
+    assert data['path'] == '/employees'
 
 
 def test_partial_update_an_employee_successfully(client):
@@ -104,7 +117,11 @@ def test_partial_update_an_employee_with_invalid_payload_fails(client):
     data = res.get_json()
 
     assert res.status_code == 400
-    assert b'Not a valid string' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'PATCH'
+    assert data['messages'] == {'name': ['Not a valid string.']}
+    assert data['path'] == '/employees/1'
 
 
 def test_partial_update_an_employee_that_not_exists_fails(client):
@@ -113,9 +130,14 @@ def test_partial_update_an_employee_that_not_exists_fails(client):
     }
 
     res = client.patch(detail_url(5), json=payload)
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"An employee doesn't exist" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'PATCH'
+    assert data['message'] == "An employee doesn't exist."
+    assert data['path'] == "/employees/5"
 
 
 def test_delete_an_employee_successfully(client):
@@ -130,6 +152,11 @@ def test_delete_an_employee_successfully(client):
 
 def test_delete_an_employee_that_not_exists_fails(client):
     res = client.delete(detail_url(5))
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"An employee doesn't exist" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'DELETE'
+    assert data['message'] == "An employee doesn't exist."
+    assert data['path'] == "/employees/5"

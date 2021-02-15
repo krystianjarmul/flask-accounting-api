@@ -22,7 +22,13 @@ def retrieve_employee(pk):
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
-        return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
+        return jsonify({
+            'error': 'Not Found',
+            'status': '404',
+            'method': request.method,
+            'message': "An employee doesn't exist.",
+            'path': request.path,
+        }), 404
 
     result = employee_schema.dump(employee)
 
@@ -32,15 +38,18 @@ def retrieve_employee(pk):
 @app.route('/employees', methods=['POST'])
 def create_employee():
     employee_schema = EmployeeSchema()
-    if not request.json:
-        return jsonify({'error': {'detail': "No data has been sent"}}), 400
 
     try:
         employee_schema.load(request.json)
 
     except ValidationError as e:
-
-        return jsonify({'error': e.messages}), 400
+        return jsonify({
+            'error': 'Bad Request',
+            'status': '400',
+            'method': request.method,
+            'messages': e.messages,
+            'path': request.path,
+        }), 400
 
     employee = Employee(**request.json)
     db.session.add(employee)
@@ -56,13 +65,25 @@ def partial_update_employee(pk):
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
-        return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
+        return jsonify({
+            'error': 'Not Found',
+            'status': '404',
+            'method': request.method,
+            'message': "An employee doesn't exist.",
+            'path': request.path,
+        }), 404
 
     try:
         employee_schema.load(request.json, partial=True)
 
     except ValidationError as e:
-        return jsonify({'error': e.messages}), 400
+        return jsonify({
+            'error': 'Bad Request',
+            'status': '400',
+            'method': request.method,
+            'messages': e.messages,
+            'path': request.path,
+        }), 400
 
     update_person(employee, request.json)
     db.session.commit()
@@ -77,7 +98,13 @@ def destroy_employee(pk):
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
-        return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
+        return jsonify({
+            'error': 'Not Found',
+            'status': '404',
+            'method': request.method,
+            'message': "An employee doesn't exist.",
+            'path': request.path,
+        }), 404
 
     db.session.delete(employee)
     db.session.commit()
