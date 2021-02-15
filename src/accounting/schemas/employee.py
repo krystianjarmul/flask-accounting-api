@@ -4,13 +4,8 @@ from src.accounting.models import Employee
 
 
 class EmployeeSchema(Schema):
-    name = fields.String()
+    name = fields.String(required=True)
 
     class Meta:
         model = Employee
         fields = ['id', 'name']
-
-    @validates('name')
-    def validate_name(self, name):
-        if not name:
-            raise ValidationError('No name was given')

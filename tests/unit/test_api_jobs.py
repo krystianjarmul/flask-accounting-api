@@ -84,4 +84,17 @@ def test_create_a_job_with_invalid_payload_fails(client):
     res = client.post(JOBS_URL, json=payload)
 
     assert res.status_code == 400
+    assert b'Not a valid number' in res.data
+    assert b'Not a valid time' in res.data
+    assert b'Not a valid date' in res.data
+    assert b'Not a valid integer' in res.data
+
+
+def test_create_a_job_with_empty_payload_fails(client):
+    payload = {}
+
+    res = client.post(JOBS_URL, json=payload)
+
+    assert res.status_code == 400
+    assert b'Missing data for required field' in res.data
 

@@ -40,15 +40,15 @@ def create_job():
     except ValidationError as e:
         return jsonify({'error': e.messages}), 400
 
-    date_formatted = date.fromisoformat(request.json.get('date'))
-    start_time_formatted = time.fromisoformat(request.json.get('start_time'))
+    date_formatted = date.fromisoformat(request.json['date'])
+    start_time_formatted = time.fromisoformat(request.json['start_time'])
 
     job = Job(
-        customer=request.json.get('customer'),
-        employees=request.json.get('employees'),
+        customer=request.json['customer'],
+        employees=request.json['employees'],
         date=date_formatted,
         start_time=start_time_formatted,
-        hours_number=request.json.get('hours_number'),
+        hours_number=request.json['hours_number'],
     )
     db.session.add(job)
     db.session.commit()

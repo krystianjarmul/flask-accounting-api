@@ -60,14 +60,14 @@ def test_create_an_employee_successfully(client):
 
 def test_create_an_employee_with_invalid_payload_fails(client):
     payload = {
-        'name': ''
+        'name': 3
     }
 
     res = client.post(EMPLOYEE_URL, json=payload)
     data = res.get_json()
 
     assert res.status_code == 400
-    assert b'No name was given' in res.data
+    assert b'Not a valid string' in res.data
 
 
 def test_create_an_employee_with_empty_payload_fails(client):

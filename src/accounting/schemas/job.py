@@ -4,11 +4,11 @@ from src.accounting.models import Job
 
 
 class JobSchema(Schema):
-    customer = fields.Integer()
-    employees = fields.String()
-    date = fields.Date()
-    start_time = fields.Time()
-    hours_number = fields.Float()
+    customer = fields.Integer(required=True)
+    employees = fields.String(required=True)
+    date = fields.Date(required=True)
+    start_time = fields.Time(required=True)
+    hours_number = fields.Float(required=True)
 
     class Meta:
         model = Job

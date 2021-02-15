@@ -58,11 +58,8 @@ def partial_update_employee(pk):
     if not employee:
         return jsonify({'error': {'detail': "An employee doesn't exist"}}), 404
 
-    if not request.json:
-        return jsonify({'error': {'detail': "No data has been sent"}}), 400
-
     try:
-        employee_schema.load(request.json)
+        employee_schema.load(request.json, partial=True)
 
     except ValidationError as e:
         return jsonify({'error': e.messages}), 400
