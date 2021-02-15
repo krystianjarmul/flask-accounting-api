@@ -77,3 +77,18 @@ def partial_update_jobs(pk):
     result = job_schema.dump(job)
 
     return jsonify(result), 200
+
+
+@app.route('/jobs/<int:pk>', methods=['DELETE'])
+def destroy_job(pk):
+    job = Job.query.get(pk)
+    job_schema = JobSchema()
+    if not job:
+        return jsonify({'error': {'detail': "A job doesn't exists"}}), 404
+
+    db.session.delete(job)
+    db.session.commit()
+
+    result = job_schema.dump(job)
+
+    return jsonify(result), 200

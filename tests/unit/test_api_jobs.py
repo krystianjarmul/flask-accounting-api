@@ -134,3 +134,25 @@ def test_partial_update_job_that_not_exists_fails(client):
 
     assert res.status_code == 404
     assert b"A job doesn't exist" in res.data
+
+
+def test_destroy_job_successfully(client):
+    job_id = add_job(1, [2, 3], date(2021, 1, 1), time(11, 30), 2.0)
+
+    res = client.delete(detail_url(job_id))
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['id'] == job_id
+    assert data['customer'] == 1
+    assert data['employees'] == '2,3'
+    assert data['date'] == '2021-01-01'
+    assert data['start_time'] == '11:30:00'
+    assert data['hours_number'] == 2.0
+
+
+def test_destroy_job_that_not_exists_fails(client):
+    res = client.delete(detail_url(3))
+
+    assert res.status_code == 404
+    assert b"A job doesn't exists" in res.data
