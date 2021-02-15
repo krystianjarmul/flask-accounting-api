@@ -1,3 +1,4 @@
+from datetime import date, time
 from typing import Union
 
 from src.accounting.models import Employee, Customer, Job
@@ -18,6 +19,6 @@ def update_job(job: Job, data: dict):
         if attr == 'date':
             setattr(job, attr, date.fromisoformat(data['date']))
         elif attr == 'start_time':
-            setattr(job, attr, date.fromisoformat(data['start_time']))
+            setattr(job, attr, time.fromisoformat(data['start_time']))
         else:
             setattr(job, attr, data.get(attr))

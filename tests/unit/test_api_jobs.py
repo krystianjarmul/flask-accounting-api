@@ -46,9 +46,14 @@ def test_retrieve_a_single_job_successfully(client):
 
 def test_retrieve_a_single_job_that_not_exists_fails(client):
     res = client.get(detail_url(2))
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"A job doesn't exists" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'GET'
+    assert data['message'] == "A job doesn't exist"
+    assert data['path'] == "/jobs/2"
 
 
 def test_create_a_job_successfully(client):
@@ -75,19 +80,15 @@ def test_create_a_job_successfully(client):
 def test_create_a_job_with_invalid_payload_fails(client):
     payload = {
         'customer': '',
-        'employees': '',
-        'date': '',
-        'start_time': '',
-        'hours_number': '',
+        'employees': '2,3',
+        'date': '2021-02-02',
+        'start_time': '10:30:00',
+        'hours_number': 1.5,
     }
 
     res = client.post(JOBS_URL, json=payload)
 
     assert res.status_code == 400
-    assert b'Not a valid number' in res.data
-    assert b'Not a valid time' in res.data
-    assert b'Not a valid date' in res.data
-    assert b'Not a valid integer' in res.data
 
 
 def test_create_a_job_with_empty_payload_fails(client):

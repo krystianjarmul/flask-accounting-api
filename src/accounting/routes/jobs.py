@@ -24,7 +24,13 @@ def retrieve_job(pk):
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({'error': {'detail': "A job doesn't exists"}}), 404
+        return jsonify({
+            'error': 'Not Found',
+            'status': '404',
+            'method': request.method,
+            'message': "A job doesn't exist",
+            'path': request.path,
+        }), 404
 
     result = job_schema.dump(job)
 
@@ -84,7 +90,7 @@ def destroy_job(pk):
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({'error': {'detail': "A job doesn't exists"}}), 404
+        return jsonify({'error': "A job doesn't exists"}), 404
 
     db.session.delete(job)
     db.session.commit()
