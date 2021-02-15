@@ -45,12 +45,15 @@ def test_retrieve_a_single_job_successfully(client):
 
     assert res.status_code == 200
     assert data['id'] == job_id
-    assert data['customer_id'] == 1
-    # assert data['customer'] == {'name': 'Michael Ballack', 'hourly_rate': 12.0}
     assert data['employees'] == '2,3'
     assert data['date'] == '2021-01-01'
     assert data['start_time'] == '11:30:00'
     assert data['hours_number'] == 2.0
+    assert data['customer'] == {
+        'id': 1,
+        'name': 'Michael Ballack',
+        'hourly_rate': 12.0
+    }
 
 
 def test_retrieve_a_single_job_that_not_exists_fails(client):
@@ -181,7 +184,6 @@ def test_destroy_job_successfully(client):
 
     assert res.status_code == 200
     assert data['id'] == job_id
-    assert data['customer_id'] == 1
     assert data['employees'] == '2,3'
     assert data['date'] == '2021-01-01'
     assert data['start_time'] == '11:30:00'

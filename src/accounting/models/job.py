@@ -11,6 +11,7 @@ class Job(db.Model):
     date = db.Column(db.Date)
     start_time = db.Column(db.Time)
     hours_number = db.Column(db.Float)
+    customer = db.relationship('Customer', backref='jobs', cascade='all')
 
     def __init__(
             self,
