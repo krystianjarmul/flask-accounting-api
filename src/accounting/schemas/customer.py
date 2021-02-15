@@ -14,4 +14,4 @@ class CustomerSchema(Schema):
     @validates('hourly_rate')
     def validate_hourly_rate(self, hourly_rate):
         if hourly_rate <= 0:
-            raise ValidationError('Hourly rate must be a positive number')
+            raise ValidationError('Not a positive number.')

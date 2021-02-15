@@ -41,9 +41,14 @@ def test_retrieve_a_single_customer_successfully(client):
 
 def test_retrieve_a_single_customer_that_not_exists_fails(client):
     res = client.get(detail_url(5))
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"A customer doesn't exist" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'GET'
+    assert data['message'] == "A customer doesn't exist."
+    assert data['path'] == "/customers/5"
 
 
 def test_create_a_customer_successfully(client):
@@ -65,21 +70,34 @@ def test_create_a_customer_with_empty_payload_fails(client):
     payload = {}
 
     res = client.post(CUSTOMER_URL, json=payload)
+    data = res.get_json()
 
     assert res.status_code == 400
-    assert b'No data has been sent' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'POST'
+    assert data['messages'] == {
+        'name': ['Missing data for required field.'],
+        'hourly_rate': ['Missing data for required field.']
+    }
+    assert data['path'] == '/customers'
 
 
 def test_create_a_customer_with_invalid_payload_fails(client):
     payload = {
-        'name': '',
+        'name': 'Stefan Miller',
         'hourly_rate': '',
     }
 
     res = client.post(CUSTOMER_URL, json=payload)
+    data = res.get_json()
 
     assert res.status_code == 400
-    assert b'Not a valid number' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'POST'
+    assert data['messages'] == {'hourly_rate': ['Not a valid number.']}
+    assert data['path'] == '/customers'
 
 
 def test_partial_update_a_customer_successfully(client):
@@ -103,9 +121,14 @@ def test_partial_update_a_customer_that_not_exists_fails(client):
     }
 
     res = client.patch(detail_url(4), json=payload)
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"A customer doesn't exist" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'PATCH'
+    assert data['message'] == "A customer doesn't exist."
+    assert data['path'] == "/customers/4"
 
 
 def test_partial_update_a_customer_with_invalid_payload_fails(client):
@@ -115,9 +138,14 @@ def test_partial_update_a_customer_with_invalid_payload_fails(client):
     }
 
     res = client.patch(detail_url(customer_id), json=payload)
+    data = res.get_json()
 
     assert res.status_code == 400
-    assert b'Hourly rate must be a positive number' in res.data
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'PATCH'
+    assert data['messages'] == {'hourly_rate': ['Not a positive number.']}
+    assert data['path'] == '/customers/1'
 
 
 def test_delete_a_customer_successfully(client):
@@ -134,6 +162,11 @@ def test_delete_a_customer_successfully(client):
 
 def test_delete_a_customer_that_not_exists_fails(client):
     res = client.delete(detail_url(3))
+    data = res.get_json()
 
     assert res.status_code == 404
-    assert b"A customer doesn't exist" in res.data
+    assert data['error'] == 'Not Found'
+    assert data['status'] == '404'
+    assert data['method'] == 'DELETE'
+    assert data['message'] == "A customer doesn't exist."
+    assert data['path'] == "/customers/3"
