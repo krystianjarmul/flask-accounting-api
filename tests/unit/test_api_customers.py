@@ -1,18 +1,12 @@
 from src.accounting import db
 from src.accounting.models import Customer
+from tests.helpers import add_customer
 
 CUSTOMER_URL = '/customers'
 
 
 def detail_url(customer_id):
     return f'{CUSTOMER_URL}/{customer_id}'
-
-
-def add_customer(name, hr):
-    customer = Customer(name, hr)
-    db.session.add(customer)
-    db.session.commit()
-    return customer.id
 
 
 def test_retrieve_a_list_of_customers(client):

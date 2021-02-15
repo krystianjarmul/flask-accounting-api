@@ -1,27 +1,12 @@
 from datetime import time, date
 
-from src.accounting import db
-from src.accounting.models import Job, Customer
+from tests.helpers import add_job, add_customer
 
 JOBS_URL = '/jobs'
 
 
 def detail_url(job_id):
     return f'{JOBS_URL}/{job_id}'
-
-
-def add_job(cid, eids, d, st, hn):
-    job = Job(cid, eids, d, st, hn)
-    db.session.add(job)
-    db.session.commit()
-    return job.id
-
-
-def add_customer(name, hr):
-    customer = Customer(name, hr)
-    db.session.add(customer)
-    db.session.commit()
-    return customer.id
 
 
 def test_retrieve_list_of_jobs(client):

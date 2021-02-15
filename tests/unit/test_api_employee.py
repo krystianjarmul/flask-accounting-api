@@ -1,18 +1,12 @@
 from src.accounting.models import Employee
 from src.accounting import db
+from tests.helpers import add_employee
 
 EMPLOYEE_URL = '/employees'
 
 
 def detail_url(employee_id):
     return f'{EMPLOYEE_URL}/{employee_id}'
-
-
-def add_employee(name):
-    employee = Employee(name)
-    db.session.add(employee)
-    db.session.commit()
-    return employee.id
 
 
 def test_retrieve_list_of_employees(client):
