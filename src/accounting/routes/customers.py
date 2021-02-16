@@ -1,4 +1,6 @@
-from flask import jsonify, request
+from typing import Tuple
+
+from flask import jsonify, request, Response
 from marshmallow import ValidationError
 
 from src.accounting import app, db
@@ -11,7 +13,7 @@ from src.accounting.utils import update_person
 # TODO dodac komende managera do testow
 
 @app.route('/customers', methods=['GET'])
-def list_customers():
+def list_customers() -> Tuple[Response, int]:
     customers = Customer.query.all()
     customers_schema = CustomerSchema(many=True)
 
@@ -21,7 +23,7 @@ def list_customers():
 
 
 @app.route('/customers/<int:pk>', methods=['GET'])
-def retrieve_customer(pk):
+def retrieve_customer(pk: int) -> Tuple[Response, int]:
     customer = Customer.query.get(pk)
     customer_schema = CustomerSchema()
     if not customer:
@@ -39,7 +41,7 @@ def retrieve_customer(pk):
 
 
 @app.route('/customers', methods=['POST'])
-def create_customer():
+def create_customer() -> Tuple[Response, int]:
     customer_schema = CustomerSchema()
     errors = customer_schema.validate(request.json)
     if errors:
@@ -60,7 +62,7 @@ def create_customer():
 
 
 @app.route('/customers/<int:pk>', methods=['PATCH'])
-def partial_update_customer(pk):
+def partial_update_customer(pk: int) -> Tuple[Response, int]:
     customer = Customer.query.get(pk)
     customer_schema = CustomerSchema()
     if not customer:
@@ -91,7 +93,7 @@ def partial_update_customer(pk):
 
 
 @app.route('/customers/<int:pk>', methods=['DELETE'])
-def destroy_customer(pk):
+def destroy_customer(pk: int) -> Tuple[Response, int]:
     customer = Customer.query.get(pk)
     customer_schema = CustomerSchema()
     if not customer:

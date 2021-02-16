@@ -25,7 +25,7 @@ class Job(db.Model):
     employees = db.relationship(
         'Employee',
         secondary='assignments',
-        cascade='all'
+        passive_deletes=True
     )
 
     def __init__(
@@ -37,3 +37,6 @@ class Job(db.Model):
         self.date = date
         self.start_time = start_time
         self.hours_number = hours_number
+
+    def __repr__(self) -> str:
+        return f'Job id: {self.id}'

@@ -1,6 +1,7 @@
 from datetime import date, time
+from typing import Tuple
 
-from flask import jsonify, request
+from flask import jsonify, request, Response
 from marshmallow import ValidationError
 
 from src.accounting import app, db
@@ -10,7 +11,7 @@ from src.accounting.utils import update_person, update_job
 
 
 @app.route('/jobs', methods=['GET'])
-def list_jobs():
+def list_jobs() -> Tuple[Response, int]:
     jobs = Job.query.all()
     jobs_schema = JobSchema(many=True)
 
@@ -20,7 +21,7 @@ def list_jobs():
 
 
 @app.route('/jobs/<int:pk>', methods=['GET'])
-def retrieve_job(pk):
+def retrieve_job(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
@@ -38,7 +39,7 @@ def retrieve_job(pk):
 
 
 @app.route('/jobs', methods=['POST'])
-def create_job():
+def create_job() -> Tuple[Response, int]:
     job_schema = JobSchema()
     errors = job_schema.validate(request.json)
     if errors:
@@ -67,7 +68,7 @@ def create_job():
 
 
 @app.route('/jobs/<int:pk>', methods=['PATCH'])
-def partial_update_jobs(pk):
+def partial_update_jobs(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
@@ -98,7 +99,7 @@ def partial_update_jobs(pk):
 
 
 @app.route('/jobs/<int:pk>', methods=['DELETE'])
-def destroy_job(pk):
+def destroy_job(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:

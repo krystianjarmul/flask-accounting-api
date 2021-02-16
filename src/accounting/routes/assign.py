@@ -6,7 +6,7 @@ from src.accounting.schemas import JobSchema, AssignSchema
 
 
 @app.route('/jobs/<int:pk>/assign_customer', methods=['POST'])
-def assign_customer(pk):
+def assign_customer(pk: int):
     job = Job.query.get(pk)
     errors = AssignSchema().validate(request.json)
     if errors:
@@ -37,7 +37,7 @@ def assign_customer(pk):
 
 
 @app.route('/jobs/<int:pk>/assign_employee', methods=['POST'])
-def assign_employee(pk):
+def assign_employee(pk: int):
     job = Job.query.get(pk)
     errors = AssignSchema().validate(request.json)
     if errors:

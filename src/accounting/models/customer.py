@@ -11,3 +11,6 @@ class Customer(db.Model):
     def __init__(self, name: str, hourly_rate: float):
         self.name = name
         self.hourly_rate = hourly_rate
+
+    def __repr__(self) -> str:
+        return f'Customer id: {self.id} name: {self.name}'

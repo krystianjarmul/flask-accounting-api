@@ -1,4 +1,6 @@
-from flask import jsonify, request
+from typing import Tuple
+
+from flask import jsonify, request, Response
 from marshmallow import ValidationError
 
 from src.accounting import app, db
@@ -8,7 +10,7 @@ from src.accounting.utils import update_person
 
 
 @app.route('/employees', methods=['GET'])
-def list_employee():
+def list_employee() -> Tuple[Response, int]:
     employees = Employee.query.all()
     employees_schema = EmployeeSchema(many=True)
 
@@ -18,7 +20,7 @@ def list_employee():
 
 
 @app.route('/employees/<int:pk>')
-def retrieve_employee(pk):
+def retrieve_employee(pk: int) -> Tuple[Response, int]:
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
@@ -36,7 +38,7 @@ def retrieve_employee(pk):
 
 
 @app.route('/employees', methods=['POST'])
-def create_employee():
+def create_employee() -> Tuple[Response, int]:
     employee_schema = EmployeeSchema()
     errors = employee_schema.validate(request.json)
     if errors:
@@ -58,7 +60,7 @@ def create_employee():
 
 
 @app.route('/employees/<int:pk>', methods=['PATCH'])
-def partial_update_employee(pk):
+def partial_update_employee(pk: int) -> Tuple[Response, int]:
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
@@ -89,7 +91,7 @@ def partial_update_employee(pk):
 
 
 @app.route('/employees/<int:pk>', methods=['DELETE'])
-def destroy_employee(pk):
+def destroy_employee(pk: int) -> Tuple[Response, int]:
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:

@@ -8,8 +8,11 @@ class Employee(db.Model):
     jobs = db.relationship(
         'Job',
         secondary='assignments',
-        cascade='all'
+        passive_deletes=True
     )
 
     def __init__(self, name: str):
         self.name = name
+
+    def __repr__(self) -> str:
+        return f'Employee id: {self.id} name: {self.name}'
