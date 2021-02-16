@@ -1,4 +1,7 @@
 from datetime import date, time
+
+from src.accounting import db
+from src.accounting.models import Job, Customer
 from .helpers import add_customer, add_job
 
 
@@ -76,3 +79,16 @@ def test_assign_customer_to_job_when_customer_id_not_match(client):
     assert data['messages'] == {'customer_id': ['Not match.']}
     assert data['path'] == '/jobs/1/assign_customer'
     assert data['method'] == 'POST'
+
+
+def test_assign_customer_to_job_provides_access_to_jobs_from_customer(client):
+    customer_id = add_customer('Stefan Miller', 11.5)
+    job_id = add_job(date(2021, 11, 11), time(11, 30), 2.0)
+    job = Job.query.get(job_id)
+    customer = Customer.query.get(customer_id)
+
+    job.customer_id = customer_id
+    db.session.add(job)
+    db.session.commit()
+
+    assert customer.jobs == [job]
