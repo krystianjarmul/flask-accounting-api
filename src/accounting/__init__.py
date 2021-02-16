@@ -10,4 +10,4 @@ else:
 
 db = SQLAlchemy(app)
 
-from .routes import employees, customers, jobs
+from .routes import employees, customers, jobs, assign
