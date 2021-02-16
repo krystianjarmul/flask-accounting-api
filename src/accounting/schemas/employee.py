@@ -4,8 +4,5 @@ from src.accounting.models import Employee
 
 
 class EmployeeSchema(Schema):
+    id = fields.Integer()
     name = fields.String(required=True)
-
-    class Meta:
-        model = Employee
-        fields = ['id', 'name']

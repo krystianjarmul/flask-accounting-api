@@ -4,12 +4,9 @@ from src.accounting.models import Customer
 
 
 class CustomerSchema(Schema):
+    id = fields.Integer()
     name = fields.String(required=True)
     hourly_rate = fields.Float(required=True)
-
-    class Meta:
-        model = Customer
-        fields = ['id', 'name', 'hourly_rate']
 
     @validates('hourly_rate')
     def validate_hourly_rate(self, hourly_rate):

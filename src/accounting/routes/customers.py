@@ -7,7 +7,6 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO dodac relacje pomiedzy modelami
 # TODO uproscic walidance w schematach, moze flask-marshmallow
 # TODO wyswietlac zagniezdzone modele np. {"customer": {"id": 1, "name": "Hans.}
 # TODO dodac error handling decorators

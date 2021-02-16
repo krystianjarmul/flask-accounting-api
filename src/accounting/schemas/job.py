@@ -5,6 +5,7 @@ from src.accounting.schemas import CustomerSchema, EmployeeSchema
 
 
 class JobSchema(Schema):
+    id = fields.Integer()
     customer_id = fields.Integer(required=True)
     employee_ids = fields.String(required=True)
     date = fields.Date(required=True)
@@ -13,16 +14,3 @@ class JobSchema(Schema):
 
     customer = fields.Nested(CustomerSchema)
     employees = fields.Nested(EmployeeSchema, many=True)
-
-    class Meta:
-        model = Job
-        fields = [
-            'id',
-            'customer_id',
-            'employee_ids',
-            'date',
-            'start_time',
-            'hours_number',
-            'customer',
-            'employees'
-        ]
