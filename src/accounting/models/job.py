@@ -25,7 +25,6 @@ class Job(db.Model):
     employees = db.relationship(
         'Employee',
         secondary='assignments',
-        backref=db.backref('jobs', lazy='dynamic'),
         cascade='all'
     )
 

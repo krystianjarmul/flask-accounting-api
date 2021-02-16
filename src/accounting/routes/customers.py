@@ -7,10 +7,8 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO uproscic modele i rozdzielic iniekcje obcych kluczy, dodac
-#  endpoint ktory przypisuje pracownikow i klientow do pracy
 # TODO dodac error handling decorators
-# TODO dodac managera do inicjacji bazy danych, testow itp
+# TODO dodac komende managera do testow
 
 @app.route('/customers', methods=['GET'])
 def list_customers():

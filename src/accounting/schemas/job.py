@@ -11,4 +11,4 @@ class JobSchema(Schema):
     hours_number = fields.Float(required=True)
 
     customer = fields.Nested(CustomerSchema)
-    # employees = fields.Nested(EmployeeSchema, many=True)
+    employees = fields.Nested(EmployeeSchema, many=True)
