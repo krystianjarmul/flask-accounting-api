@@ -43,15 +43,13 @@ def retrieve_customer(pk):
 @app.route('/customers', methods=['POST'])
 def create_customer():
     customer_schema = CustomerSchema()
-    try:
-        customer_schema.load(request.json)
-
-    except ValidationError as e:
+    errors = customer_schema.validate(request.json)
+    if errors:
         return jsonify({
             'error': 'Bad Request',
             'status': '400',
             'method': request.method,
-            'messages': e.messages,
+            'messages': errors,
             'path': request.path,
         }), 400
 
@@ -76,15 +74,13 @@ def partial_update_customer(pk):
             'path': request.path,
         }), 404
 
-    try:
-        customer_schema.load(request.json, partial=True)
-
-    except ValidationError as e:
+    errors = customer_schema.validate(request.json, partial=True)
+    if errors:
         return jsonify({
             'error': 'Bad Request',
             'status': '400',
             'method': request.method,
-            'messages': e.messages,
+            'messages': errors,
             'path': request.path,
         }), 400
 

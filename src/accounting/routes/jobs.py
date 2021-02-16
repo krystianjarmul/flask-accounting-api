@@ -40,15 +40,13 @@ def retrieve_job(pk):
 @app.route('/jobs', methods=['POST'])
 def create_job():
     job_schema = JobSchema()
-    try:
-        job_schema.load(request.json)
-
-    except ValidationError as e:
+    errors = job_schema.validate(request.json)
+    if errors:
         return jsonify({
             'error': 'Bad Request',
             'status': '400',
             'method': request.method,
-            'messages': e.messages,
+            'messages': errors,
             'path': request.path,
         }), 400
 
@@ -83,15 +81,13 @@ def partial_update_jobs(pk):
             'path': request.path,
         }), 404
 
-    try:
-        job_schema.load(request.json, partial=True)
-
-    except ValidationError as e:
+    errors = job_schema.validate(request.json, partial=True)
+    if errors:
         return jsonify({
             'error': 'Bad Request',
             'status': '400',
             'method': request.method,
-            'messages': e.messages,
+            'messages': errors,
             'path': request.path,
         }), 400
 
