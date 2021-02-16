@@ -1,6 +1,4 @@
-from marshmallow import Schema, fields, validates, ValidationError
-
-from src.accounting.models import Employee
+from marshmallow import Schema, fields
 
 
 class EmployeeSchema(Schema):

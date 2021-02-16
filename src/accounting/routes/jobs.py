@@ -4,8 +4,9 @@ from flask import jsonify, request
 from marshmallow import ValidationError
 
 from src.accounting import app, db
-from src.accounting.models import Job
+from src.accounting.models import Job, Customer
 from src.accounting.schemas import JobSchema
+from src.accounting.schemas.assign import AssignSchema
 from src.accounting.utils import update_person, update_job
 
 
@@ -116,3 +117,34 @@ def destroy_job(pk):
     result = job_schema.dump(job)
 
     return jsonify(result), 200
+
+
+@app.route('/jobs/<int:pk>/assign_customer', methods=['POST'])
+def assign_customer(pk):
+    job = Job.query.get(pk)
+    errors = AssignSchema().validate(request.json)
+    if errors:
+        return jsonify({
+            'error': 'Bad Request',
+            'status': '400',
+            'method': request.method,
+            'messages': errors,
+            'path': request.path,
+        }), 400
+
+    if not job:
+        return jsonify({
+            'error': 'Not Found',
+            'status': '404',
+            'method': request.method,
+            'message': "A job doesn't exist.",
+            'path': request.path,
+        }), 404
+
+    job.customer_id = request.json['customer_id']
+    db.session.add(job)
+    db.session.commit()
+
+    result = JobSchema().dump(job)
+
+    return jsonify(result), 201

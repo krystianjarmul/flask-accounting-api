@@ -1,7 +1,5 @@
 from marshmallow import Schema, fields, validates, ValidationError
 
-from src.accounting.models import Customer
-
 
 class CustomerSchema(Schema):
     id = fields.Integer()
