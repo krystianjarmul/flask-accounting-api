@@ -6,6 +6,8 @@ class Customer(db.Model):
     name = db.Column(db.String(255))
     hourly_rate = db.Column(db.Float)
 
+    jobs = db.relationship('Job', backref='customer', cascade='all')
+
     def __init__(self, name: str, hourly_rate: float):
         self.name = name
         self.hourly_rate = hourly_rate

@@ -2,8 +2,8 @@ from src.accounting import db
 from src.accounting.models import Job, Customer, Employee
 
 
-def add_job(cid, eids, d, st, hn):
-    job = Job(cid, eids, d, st, hn)
+def add_job(d, st, hn):
+    job = Job(d, st, hn)
     db.session.add(job)
     db.session.commit()
     return job.id

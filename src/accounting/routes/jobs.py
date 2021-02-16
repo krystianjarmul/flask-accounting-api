@@ -54,8 +54,6 @@ def create_job():
     start_time_formatted = time.fromisoformat(request.json['start_time'])
 
     job = Job(
-        customer_id=request.json['customer_id'],
-        employee_ids=request.json['employee_ids'],
         date=date_formatted,
         start_time=start_time_formatted,
         hours_number=request.json['hours_number'],
