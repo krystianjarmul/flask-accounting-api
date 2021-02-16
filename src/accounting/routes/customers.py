@@ -7,8 +7,8 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO uproscic walidance w schematach, moze flask-marshmallow
-# TODO wyswietlac zagniezdzone modele np. {"customer": {"id": 1, "name": "Hans.}
+# TODO uproscic modele i rozdzielic iniekcje obcych kluczy, dodac
+#  endpoint ktory przypisuje pracownikow i klientow do pracy
 # TODO dodac error handling decorators
 # TODO dodac managera do inicjacji bazy danych, testow itp
 

@@ -1,7 +1,7 @@
 from datetime import time, date
 
 from src.accounting import db
-from src.accounting.models import Job, Employee
+from src.accounting.models import Job
 from tests.helpers import add_job, add_customer, add_employee
 
 JOBS_URL = '/jobs'
