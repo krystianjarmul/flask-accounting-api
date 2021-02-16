@@ -25,7 +25,6 @@ class Job(db.Model):
     employees = db.relationship(
         'Employee',
         secondary='assignments',
-        passive_deletes=True
     )
 
     def __init__(
