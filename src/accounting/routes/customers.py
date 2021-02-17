@@ -9,9 +9,14 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO dodac komende managera do testow
-# TODO dodac nadpisywanie customera
-# TODO dodac odpisywanie employera
+# TODO dodac nadpisywanie customera (reassign_customer [PATCH])
+# TODO dodac odpisywanie employera (unassign_employee [PATCH])
+# TODO zmienic metode updejtujaca modele [PATCH] -> [PUT]
+# TODO dodac logike
+# TODO dodac srodowisko produkcyjne (+ postgres)
+# TODO dodac docker i docker-compose
+# TODO rozwinac readme
+# TODO dodac swagger
 
 
 @app.route('/customers', methods=['GET'])

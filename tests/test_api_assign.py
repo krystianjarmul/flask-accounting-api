@@ -2,7 +2,8 @@ from datetime import date, time
 
 from src.accounting import db
 from src.accounting.models import Job, Customer, Employee
-from .helpers import add_customer, add_job, add_employee
+from .helpers import add_customer, add_job, add_employee, assign_customer, \
+    assign_employee
 
 
 def assign_customer_url(job_id):
@@ -11,6 +12,14 @@ def assign_customer_url(job_id):
 
 def assign_employee_url(job_id):
     return f'/jobs/{job_id}/assign_employee'
+
+
+def reassign_customer_url(job_id):
+    return f'jobs/{job_id}/reassign_customer'
+
+
+def unassign_employee_url(job_id):
+    return f'jobs/{job_id}/unassign_employee'
 
 
 def test_assign_customer_to_job_successfully(client):
@@ -150,3 +159,42 @@ def test_assign_employee_to_job_when_employee_id_not_match(client):
     assert data['messages'] == {'employee_id': ['Not a matching integer.']}
     assert data['path'] == '/jobs/1/assign_employee'
     assert data['method'] == 'POST'
+
+
+def test_reassign_customer_from_job_successfully(client):
+    job_id = add_job(date(2021, 11, 11), time(11, 30), 2.0)
+    customer_id1 = add_customer('Stefan Miller', 12.0)
+    customer_id2 = add_customer('Michael Jordan', 11.5)
+    assign_customer(job_id, customer_id1)
+    payload = {
+        'customer_id': customer_id2
+    }
+
+    res = client.patch(reassign_customer_url(job_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['id'] == job_id
+    assert data['customer'] == {
+        'id': 2,
+        'name': 'Michael Jordan',
+        'hourly_rate': 11.5
+    }
+
+
+def test_unassign_employee_from_job_successfully(client):
+    employee_id1 = add_employee('Maria Nowak')
+    employee_id2 = add_employee('Katarzyna Test')
+    job_id = add_job(date(2021, 11, 1), time(11, 30), 2.5)
+    assign_employee(job_id, employee_id1)
+    assign_employee(job_id, employee_id2)
+    payload = {
+        'employee_id': employee_id1,
+    }
+
+    res = client.delete(unassign_employee_url(job_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['id'] == job_id
+    assert data['employees'] == [{'id': 2, 'name': 'Katarzyna Test'}]
