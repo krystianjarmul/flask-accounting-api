@@ -68,7 +68,7 @@ def create_job() -> Tuple[Response, int]:
 
 
 @app.route('/jobs/<int:pk>', methods=['PATCH'])
-def partial_update_jobs(pk: int) -> Tuple[Response, int]:
+def partial_update_job(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:

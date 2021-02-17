@@ -1,4 +1,5 @@
 from datetime import date, time
+from typing import Tuple
 
 from src.accounting import db
 from src.accounting.models import Job, Customer, Employee
@@ -23,3 +24,19 @@ def add_employee(name: str) -> int:
     db.session.add(employee)
     db.session.commit()
     return employee.id
+
+
+def assign_customer(jid: int, cid: int) -> Tuple[Job, Customer]:
+    job = Job.query.get(jid)
+    customer = Customer.query.get(cid)
+    job.customer_id = cid
+    db.session.commit()
+    return job, customer
+
+
+def assign_employee(jid: int, eid: int) -> Tuple[Job, Employee]:
+    job = Job.query.get(jid)
+    employee = Employee.query.get(eid)
+    job.employees.append(employee)
+    db.session.commit()
+    return job, employee

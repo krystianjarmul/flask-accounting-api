@@ -11,6 +11,8 @@ from src.accounting.utils import update_person
 
 # TODO dodac error handling decorators
 # TODO dodac komende managera do testow
+# TODO dodac nadpisywanie customera
+# TODO dodac odpisywanie employera
 
 @app.route('/customers', methods=['GET'])
 def list_customers() -> Tuple[Response, int]:

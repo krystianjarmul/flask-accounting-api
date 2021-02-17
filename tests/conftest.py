@@ -12,3 +12,10 @@ def client():
     db.create_all()
     yield app.test_client()
     db.drop_all()
+
+
+@pytest.fixture
+def session():
+    db.create_all()
+    yield db.session
+    db.drop_all()
