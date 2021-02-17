@@ -1,7 +1,7 @@
 from datetime import date, time
 from typing import Tuple
 
-from flask import jsonify, request, Response
+from flask import jsonify, request, Response, abort
 from marshmallow import ValidationError
 
 from src.accounting import app, db
@@ -25,13 +25,7 @@ def retrieve_job(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "A job doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "A job doesn't exist.")
 
     result = job_schema.dump(job)
 
@@ -43,13 +37,7 @@ def create_job() -> Tuple[Response, int]:
     job_schema = JobSchema()
     errors = job_schema.validate(request.json)
     if errors:
-        return jsonify({
-            'error': 'Bad Request',
-            'status': '400',
-            'method': request.method,
-            'messages': errors,
-            'path': request.path,
-        }), 400
+        abort(400, errors)
 
     date_formatted = date.fromisoformat(request.json['date'])
     start_time_formatted = time.fromisoformat(request.json['start_time'])
@@ -72,23 +60,11 @@ def partial_update_job(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': 'PATCH',
-            'message': "A job doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "A job doesn't exist.")
 
     errors = job_schema.validate(request.json, partial=True)
     if errors:
-        return jsonify({
-            'error': 'Bad Request',
-            'status': '400',
-            'method': request.method,
-            'messages': errors,
-            'path': request.path,
-        }), 400
+        abort(400, errors)
 
     update_job(job, request.json)
     db.session.commit()
@@ -103,13 +79,7 @@ def destroy_job(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     job_schema = JobSchema()
     if not job:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "A job doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "A job doesn't exist.")
 
     db.session.delete(job)
     db.session.commit()

@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from flask import jsonify, request, Response
+from flask import jsonify, request, Response, abort
 from marshmallow import ValidationError
 
 from src.accounting import app, db
@@ -24,13 +24,7 @@ def retrieve_employee(pk: int) -> Tuple[Response, int]:
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "An employee doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "An employee doesn't exist.")
 
     result = employee_schema.dump(employee)
 
@@ -42,13 +36,7 @@ def create_employee() -> Tuple[Response, int]:
     employee_schema = EmployeeSchema()
     errors = employee_schema.validate(request.json)
     if errors:
-        return jsonify({
-            'error': 'Bad Request',
-            'status': '400',
-            'method': request.method,
-            'messages': errors,
-            'path': request.path,
-        }), 400
+        abort(400, errors)
 
     employee = Employee(**request.json)
     db.session.add(employee)
@@ -64,23 +52,11 @@ def partial_update_employee(pk: int) -> Tuple[Response, int]:
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "An employee doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "An employee doesn't exist.")
 
     errors = employee_schema.validate(request.json, partial=True)
     if errors:
-        return jsonify({
-            'error': 'Bad Request',
-            'status': '400',
-            'method': request.method,
-            'messages': errors,
-            'path': request.path,
-        }), 400
+        abort(400, errors)
 
     update_person(employee, request.json)
     db.session.commit()
@@ -95,13 +71,7 @@ def destroy_employee(pk: int) -> Tuple[Response, int]:
     employee = Employee.query.get(pk)
     employee_schema = EmployeeSchema()
     if not employee:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "An employee doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "An employee doesn't exist.")
 
     db.session.delete(employee)
     db.session.commit()

@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from flask import jsonify, request, Response
+from flask import jsonify, request, Response, abort
 from marshmallow import ValidationError
 
 from src.accounting import app, db
@@ -13,6 +13,7 @@ from src.accounting.utils import update_person
 # TODO dodac komende managera do testow
 # TODO dodac nadpisywanie customera
 # TODO dodac odpisywanie employera
+
 
 @app.route('/customers', methods=['GET'])
 def list_customers() -> Tuple[Response, int]:
@@ -29,13 +30,7 @@ def retrieve_customer(pk: int) -> Tuple[Response, int]:
     customer = Customer.query.get(pk)
     customer_schema = CustomerSchema()
     if not customer:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "A customer doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "A customer doesn't exist.")
 
     result = customer_schema.dump(customer)
 
@@ -47,13 +42,7 @@ def create_customer() -> Tuple[Response, int]:
     customer_schema = CustomerSchema()
     errors = customer_schema.validate(request.json)
     if errors:
-        return jsonify({
-            'error': 'Bad Request',
-            'status': '400',
-            'method': request.method,
-            'messages': errors,
-            'path': request.path,
-        }), 400
+        abort(400, errors)
 
     customer = Customer(**request.json)
     db.session.add(customer)
@@ -68,23 +57,11 @@ def partial_update_customer(pk: int) -> Tuple[Response, int]:
     customer = Customer.query.get(pk)
     customer_schema = CustomerSchema()
     if not customer:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "A customer doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "A customer doesn't exist.")
 
     errors = customer_schema.validate(request.json, partial=True)
     if errors:
-        return jsonify({
-            'error': 'Bad Request',
-            'status': '400',
-            'method': request.method,
-            'messages': errors,
-            'path': request.path,
-        }), 400
+        abort(400, errors)
 
     update_person(customer, request.json)
     db.session.commit()
@@ -99,13 +76,7 @@ def destroy_customer(pk: int) -> Tuple[Response, int]:
     customer = Customer.query.get(pk)
     customer_schema = CustomerSchema()
     if not customer:
-        return jsonify({
-            'error': 'Not Found',
-            'status': '404',
-            'method': request.method,
-            'message': "A customer doesn't exist.",
-            'path': request.path,
-        }), 404
+        abort(404, "A customer doesn't exist.")
 
     db.session.delete(customer)
     db.session.commit()
