@@ -9,7 +9,6 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO dodac error handling decorators
 # TODO dodac komende managera do testow
 # TODO dodac nadpisywanie customera
 # TODO dodac odpisywanie employera
