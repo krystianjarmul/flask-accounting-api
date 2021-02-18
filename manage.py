@@ -12,6 +12,13 @@ manager.add_command('db', MigrateCommand)
 
 
 @manager.command
+def run():
+    env = os.environ.get('FLASK_ENV')
+    os.environ['FLASK_ENV'] = 'development' if env != 'production' else env
+    app.run()
+
+
+@manager.command
 def test():
     flask_env = os.environ.get('FLASK_ENV')
     os.environ['FLASK_ENV'] = 'testing'

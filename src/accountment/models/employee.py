@@ -19,7 +19,9 @@ class Employee(db.Model):
     def hours_number(self) -> float:
         if not self.jobs:
             return 0
-        return sum(j.hours_per_employee for j in self.jobs)
+        return sum(
+            j.hours_per_employee for j in self.jobs if j.hours_per_employee
+        )
 
     @property
     def payment(self) -> float:
