@@ -7,19 +7,19 @@ from .helpers import add_customer, add_job, add_employee, assign_customer, \
 
 
 def assign_customer_url(job_id):
-    return f'/jobs/{job_id}/assign_customer'
+    return f'/jobs/{job_id}/customer_assignment'
 
 
 def assign_employee_url(job_id):
-    return f'/jobs/{job_id}/assign_employee'
+    return f'/jobs/{job_id}/employee_assignment'
 
 
 def reassign_customer_url(job_id):
-    return f'jobs/{job_id}/reassign_customer'
+    return f'jobs/{job_id}/customer_reassignment'
 
 
 def unassign_employee_url(job_id):
-    return f'jobs/{job_id}/unassign_employee'
+    return f'jobs/{job_id}/employee_unassignment'
 
 
 def test_assign_customer_to_job_successfully(client):
@@ -57,7 +57,7 @@ def test_assign_customer_to_job_when_job_not_exists_fails(client):
     assert data['status'] == '404'
     assert data['method'] == 'POST'
     assert data['message'] == "A job doesn't exist."
-    assert data['path'] == "/jobs/3/assign_customer"
+    assert data['path'] == assign_customer_url(3)
 
 
 def test_assign_customer_to_job_with_invalid_payload_fails(client):
@@ -73,7 +73,7 @@ def test_assign_customer_to_job_with_invalid_payload_fails(client):
     assert data['error'] == 'Bad Request'
     assert data['status'] == '400'
     assert data['messages'] == {'customer_id': ['Not a valid integer.']}
-    assert data['path'] == '/jobs/1/assign_customer'
+    assert data['path'] == assign_customer_url(job_id)
     assert data['method'] == 'POST'
 
 
@@ -90,7 +90,7 @@ def test_assign_customer_to_job_when_customer_id_not_match(client):
     assert data['error'] == 'Bad Request'
     assert data['status'] == '400'
     assert data['messages'] == {'customer_id': ['Not a matching integer.']}
-    assert data['path'] == '/jobs/1/assign_customer'
+    assert data['path'] == assign_customer_url(job_id)
     assert data['method'] == 'POST'
 
 
@@ -124,7 +124,7 @@ def test_assign_employee_to_job_when_job_not_exists_fails(client):
     assert data['status'] == '404'
     assert data['method'] == 'POST'
     assert data['message'] == "A job doesn't exist."
-    assert data['path'] == "/jobs/2/assign_employee"
+    assert data['path'] == assign_employee_url(2)
 
 
 def test_assign_employee_to_job_with_invalid_payload_fails(client):
@@ -140,7 +140,7 @@ def test_assign_employee_to_job_with_invalid_payload_fails(client):
     assert data['error'] == 'Bad Request'
     assert data['status'] == '400'
     assert data['messages'] == {'employee_id': ['Not a valid integer.']}
-    assert data['path'] == '/jobs/1/assign_employee'
+    assert data['path'] == assign_employee_url(job_id)
     assert data['method'] == 'POST'
 
 
@@ -157,7 +157,7 @@ def test_assign_employee_to_job_when_employee_id_not_match(client):
     assert data['error'] == 'Bad Request'
     assert data['status'] == '400'
     assert data['messages'] == {'employee_id': ['Not a matching integer.']}
-    assert data['path'] == '/jobs/1/assign_employee'
+    assert data['path'] == assign_employee_url(job_id)
     assert data['method'] == 'POST'
 
 
@@ -170,7 +170,7 @@ def test_reassign_customer_from_job_successfully(client):
         'customer_id': customer_id2
     }
 
-    res = client.patch(reassign_customer_url(job_id), json=payload)
+    res = client.post(reassign_customer_url(job_id), json=payload)
     data = res.get_json()
 
     assert res.status_code == 200

@@ -7,7 +7,7 @@ from src.accounting.models import Job, Employee
 from src.accounting.schemas import JobSchema, AssignSchema
 
 
-@app.route('/jobs/<int:pk>/assign_customer', methods=['POST'])
+@app.route('/jobs/<int:pk>/customer_assignment', methods=['POST'])
 def assign_customer(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     if not job:
@@ -26,7 +26,7 @@ def assign_customer(pk: int) -> Tuple[Response, int]:
     return jsonify(result), 201
 
 
-@app.route('/jobs/<int:pk>/assign_employee', methods=['POST'])
+@app.route('/jobs/<int:pk>/employee_assignment', methods=['POST'])
 def assign_employee(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     if not job:
@@ -46,7 +46,7 @@ def assign_employee(pk: int) -> Tuple[Response, int]:
     return jsonify(result), 201
 
 
-@app.route('/jobs/<int:pk>/reassign_customer', methods=['PATCH'])
+@app.route('/jobs/<int:pk>/customer_reassignment', methods=['POST'])
 def reassign_customer(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     if not job:
@@ -65,7 +65,7 @@ def reassign_customer(pk: int) -> Tuple[Response, int]:
     return jsonify(result), 200
 
 
-@app.route('/jobs/<int:pk>/unassign_employee', methods=['DELETE'])
+@app.route('/jobs/<int:pk>/employee_unassignment', methods=['DELETE'])
 def unassign_employee(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
     if not job:

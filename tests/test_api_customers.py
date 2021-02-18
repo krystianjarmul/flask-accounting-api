@@ -142,6 +142,38 @@ def test_partial_update_a_customer_with_invalid_payload_fails(client):
     assert data['path'] == '/customers/1'
 
 
+def test_update_a_customer_successfully(client):
+    customer_id = add_customer('Steven Hawking', 11.50)
+    payload = {
+        'name': 'Steven Hawkins',
+        'hourly_rate': 13.0,
+    }
+
+    res = client.put(detail_url(customer_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['id'] == customer_id
+    assert data['hourly_rate'] == 13.0
+
+
+def test_update_a_customer_with_incomplete_payload_fails(client):
+    customer_id = add_customer('Steven Hawking', 11.50)
+    payload = {
+        'hourly_rate': 12,
+    }
+
+    res = client.put(detail_url(customer_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 400
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'PUT'
+    assert data['messages'] == {'name': ['Missing data for required field.']}
+    assert data['path'] == '/customers/1'
+
+
 def test_delete_a_customer_successfully(client):
     customer_id = add_customer('Steven Hawking', 11.50)
 

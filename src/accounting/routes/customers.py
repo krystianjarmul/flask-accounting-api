@@ -9,8 +9,6 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO dodac nadpisywanie customera (reassign_customer [PATCH])
-# TODO dodac odpisywanie employera (unassign_employee [PATCH])
 # TODO zmienic metode updejtujaca modele [PATCH] -> [PUT]
 # TODO dodac logike
 # TODO dodac srodowisko produkcyjne (+ postgres)
@@ -54,6 +52,25 @@ def create_customer() -> Tuple[Response, int]:
     result = customer_schema.dump(customer)
 
     return jsonify(result), 201
+
+
+@app.route('/customers/<int:pk>', methods=['PUT'])
+def update_customer(pk: int) -> Tuple[Response, int]:
+    customer = Customer.query.get(pk)
+    customer_schema = CustomerSchema()
+    if not customer:
+        abort(404, "A customer doesn't exist.")
+
+    errors = customer_schema.validate(request.json)
+    if errors:
+        abort(400, errors)
+
+    update_person(customer, request.json)
+    db.session.commit()
+
+    result = customer_schema.dump(customer)
+
+    return jsonify(result), 200
 
 
 @app.route('/customers/<int:pk>', methods=['PATCH'])
