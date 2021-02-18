@@ -94,23 +94,24 @@ def test_create_a_customer_with_invalid_payload_fails(client):
     assert data['path'] == '/customers'
 
 
-def test_partial_update_a_customer_successfully(client):
-    customer_id = add_customer('Steven Hawking', 11.5)
+def test_update_a_customer_successfully(client):
+    customer_id = add_customer('Steven Hawking', 11.50)
     payload = {
-        'hourly_rate': 12.0
+        'name': 'Steven Hawkins',
+        'hourly_rate': 13.0,
     }
 
-    res = client.patch(detail_url(customer_id), json=payload)
+    res = client.put(detail_url(customer_id), json=payload)
     data = res.get_json()
 
     assert res.status_code == 200
     assert data['id'] == customer_id
-    assert data['name'] == 'Steven Hawking'
-    assert data['hourly_rate'] == 12.0
+    assert data['hourly_rate'] == 13.0
 
 
-def test_partial_update_a_customer_that_not_exists_fails(client):
+def test_update_a_customer_that_not_exists_fails(client):
     payload = {
+        'name': 'Mark Walkberg',
         'hourly_rate': 12.0
     }
 
@@ -125,36 +126,22 @@ def test_partial_update_a_customer_that_not_exists_fails(client):
     assert data['path'] == "/customers/4"
 
 
-def test_partial_update_a_customer_with_invalid_payload_fails(client):
+def test_update_a_customer_with_invalid_payload_fails(client):
     customer_id = add_customer('Steven Hawking', 11.50)
     payload = {
+        'name': 'Steven Hawking',
         'hourly_rate': -3
-    }
-
-    res = client.patch(detail_url(customer_id), json=payload)
-    data = res.get_json()
-
-    assert res.status_code == 400
-    assert data['error'] == 'Bad Request'
-    assert data['status'] == '400'
-    assert data['method'] == 'PATCH'
-    assert data['messages'] == {'hourly_rate': ['Not a positive number.']}
-    assert data['path'] == '/customers/1'
-
-
-def test_update_a_customer_successfully(client):
-    customer_id = add_customer('Steven Hawking', 11.50)
-    payload = {
-        'name': 'Steven Hawkins',
-        'hourly_rate': 13.0,
     }
 
     res = client.put(detail_url(customer_id), json=payload)
     data = res.get_json()
 
-    assert res.status_code == 200
-    assert data['id'] == customer_id
-    assert data['hourly_rate'] == 13.0
+    assert res.status_code == 400
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['method'] == 'PUT'
+    assert data['messages'] == {'hourly_rate': ['Not a positive number.']}
+    assert data['path'] == '/customers/1'
 
 
 def test_update_a_customer_with_incomplete_payload_fails(client):

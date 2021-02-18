@@ -119,29 +119,18 @@ def test_update_a_job_successfully(client):
     assert data['id'] == job_id
     assert data['hours_number'] == payload['hours_number']
     assert data['start_time'] == payload['start_time']
+    assert data['date'] == payload['date']
 
 
-def test_partial_update_a_job_successfully(client):
-    job_id = add_job(date(2021, 1, 1), time(11, 30), 2.0)
-    payload = {
-        'hours_number': 1.5,
-    }
-
-    res = client.patch(detail_url(job_id), json=payload)
-    data = res.get_json()
-
-    assert res.status_code == 200
-    assert data['id'] == job_id
-    assert data['hours_number'] == 1.5
-
-
-def test_partial_update_with_invalid_payload_fails(client):
+def test_update_a_job_with_invalid_payload_fails(client):
     job_id = add_job(date(2021, 1, 1), time(11, 30), 2.0)
     payload = {
         'date': 2011.1011,
+        'start_time': '10:00:00',
+        'hours_number': 1.5,
     }
 
-    res = client.patch(detail_url(job_id), json=payload)
+    res = client.put(detail_url(job_id), json=payload)
     data = res.get_json()
 
     assert res.status_code == 400
@@ -149,21 +138,41 @@ def test_partial_update_with_invalid_payload_fails(client):
     assert data['status'] == '400'
     assert data['messages'] == {'date': ['Not a valid date.']}
     assert data['path'] == '/jobs/1'
-    assert data['method'] == 'PATCH'
+    assert data['method'] == 'PUT'
 
 
-def test_partial_update_job_that_not_exists_fails(client):
+def test_update_a_job_with_incomplete_payload_fails(client):
+    job_id = add_job(date(2021, 1, 1), time(11, 30), 2.0)
     payload = {
-        'date': '2021-03-03',
+        'start_time': '10:00:00',
+        'hours_number': 1.5,
     }
 
-    res = client.patch(detail_url(3), json=payload)
+    res = client.put(detail_url(job_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 400
+    assert data['error'] == 'Bad Request'
+    assert data['status'] == '400'
+    assert data['messages'] == {'date': ['Missing data for required field.']}
+    assert data['path'] == '/jobs/1'
+    assert data['method'] == 'PUT'
+
+
+def test_update_a_job_that_not_exists_fails(client):
+    payload = {
+        'date': '2021-03-03',
+        'start_time': '10:00:00',
+        'hours_number': 1.5,
+    }
+
+    res = client.put(detail_url(3), json=payload)
     data = res.get_json()
 
     assert res.status_code == 404
     assert data['error'] == 'Not Found'
     assert data['status'] == '404'
-    assert data['method'] == 'PATCH'
+    assert data['method'] == 'PUT'
     assert data['message'] == "A job doesn't exist."
     assert data['path'] == "/jobs/3"
 
