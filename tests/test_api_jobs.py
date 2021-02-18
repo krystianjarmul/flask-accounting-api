@@ -104,7 +104,24 @@ def test_create_a_job_with_empty_payload_fails(client):
     assert data['path'] == "/jobs"
 
 
-def test_partial_update_successfully(client):
+def test_update_a_job_successfully(client):
+    job_id = add_job(date(2021, 1, 1), time(11, 30), 2.0)
+    payload = {
+        'date': '2021-02-02',
+        'start_time': '10:00:00',
+        'hours_number': 1.5,
+    }
+
+    res = client.put(detail_url(job_id), json=payload)
+    data = res.get_json()
+
+    assert res.status_code == 200
+    assert data['id'] == job_id
+    assert data['hours_number'] == payload['hours_number']
+    assert data['start_time'] == payload['start_time']
+
+
+def test_partial_update_a_job_successfully(client):
     job_id = add_job(date(2021, 1, 1), time(11, 30), 2.0)
     payload = {
         'hours_number': 1.5,

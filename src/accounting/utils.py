@@ -11,7 +11,7 @@ def update_person(person: Union[Employee, Customer], data: dict):
         setattr(person, attr, data.get(attr))
 
 
-def update_job(job: Job, data: dict):
+def update_the_job(job: Job, data: dict):
     for attr in job.__dict__.keys():
         if attr not in data:
             continue

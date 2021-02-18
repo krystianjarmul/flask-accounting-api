@@ -7,7 +7,7 @@ from marshmallow import ValidationError
 from src.accounting import app, db
 from src.accounting.models import Job, Customer
 from src.accounting.schemas import JobSchema
-from src.accounting.utils import update_person, update_job
+from src.accounting.utils import update_person, update_the_job
 
 
 @app.route('/jobs', methods=['GET'])
@@ -55,6 +55,25 @@ def create_job() -> Tuple[Response, int]:
     return jsonify(result), 201
 
 
+@app.route('/jobs/<int:pk>', methods=['PUT'])
+def update_job(pk: int) -> Tuple[Response, int]:
+    job = Job.query.get(pk)
+    job_schema = JobSchema()
+    if not job:
+        abort(404, "A job doesn't exist.")
+
+    errors = job_schema.validate(request.json)
+    if errors:
+        abort(400, errors)
+
+    update_the_job(job, request.json)
+    db.session.commit()
+
+    result = job_schema.dump(job)
+
+    return jsonify(result), 200
+
+
 @app.route('/jobs/<int:pk>', methods=['PATCH'])
 def partial_update_job(pk: int) -> Tuple[Response, int]:
     job = Job.query.get(pk)
@@ -66,7 +85,7 @@ def partial_update_job(pk: int) -> Tuple[Response, int]:
     if errors:
         abort(400, errors)
 
-    update_job(job, request.json)
+    update_the_job(job, request.json)
     db.session.commit()
 
     result = job_schema.dump(job)
