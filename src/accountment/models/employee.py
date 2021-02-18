@@ -20,7 +20,8 @@ class Employee(db.Model):
         if not self.jobs:
             return 0
         return sum(
-            j.hours_per_employee for j in self.jobs if j.hours_per_employee
+            job.hours_per_employee for job in self.jobs
+            if job.hours_per_employee
         )
 
     @property
@@ -28,7 +29,8 @@ class Employee(db.Model):
         if not self.jobs:
             return 0
         return sum(
-            j.payment_for_employee for j in self.jobs if j.payment_for_employee
+            job.payment_for_employee for job in self.jobs
+            if job.payment_for_employee
         )
 
     def __repr__(self) -> str:
