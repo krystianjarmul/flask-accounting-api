@@ -1,5 +1,5 @@
 from datetime import date, time
-from src.accounting.models import Job, Employee
+from src.accounting.models import Job, Employee, Customer
 
 
 def test_end_time():
@@ -18,3 +18,15 @@ def test_hours_per_employee():
     job.employees.append(employee1)
     job.employees.append(employee2)
     assert job.hours_per_employee == 3.0
+
+
+def test_payment_for_employee():
+    job = Job(date(2021, 1, 2), time(11, 30), 6)
+    customer = Customer('Micheal Jordan', 12.0)
+    employee1 = Employee('Anna Testowa')
+    employee2 = Employee('Maria Test')
+    job.customer = customer
+    job.employees.append(employee1)
+    job.employees.append(employee2)
+    assert job.payment_for_employee == 36.0
+
