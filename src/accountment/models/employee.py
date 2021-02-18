@@ -1,4 +1,4 @@
-from .. import db
+from src.accountment import db
 
 
 class Employee(db.Model):

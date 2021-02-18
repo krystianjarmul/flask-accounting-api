@@ -1,8 +1,8 @@
 from datetime import date, time, datetime, timedelta
 from typing import List, Optional
 
-from . import Employee
-from .. import db
+from src.accountment.models import Employee
+from src.accountment import db
 
 assignments = db.Table(
     'assignments',
