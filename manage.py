@@ -15,7 +15,7 @@ manager.add_command('db', MigrateCommand)
 def run():
     env = os.environ.get('FLASK_ENV')
     os.environ['FLASK_ENV'] = 'development' if env != 'production' else env
-    app.run()
+    app.run(host='0.0.0.0')
 
 
 @manager.command
