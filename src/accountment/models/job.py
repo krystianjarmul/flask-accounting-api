@@ -1,5 +1,5 @@
 from datetime import date, time, datetime, timedelta
-from typing import List
+from typing import List, Optional
 
 from . import Employee
 from .. import db
@@ -47,12 +47,12 @@ class Job(db.Model):
         return dt.time()
 
     @property
-    def hours_per_employee(self):
+    def hours_per_employee(self) -> Optional[float]:
         if self.employees:
             return self.hours_number / len(self.employees)
 
     @property
-    def payment_for_employee(self):
+    def payment_for_employee(self) -> Optional[float]:
         if self.customer and self.hours_per_employee:
             return self.hours_per_employee * self.customer.hourly_rate
 
