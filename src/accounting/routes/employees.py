@@ -66,25 +66,6 @@ def update_employee(pk: int) -> Tuple[Response, int]:
     return jsonify(result), 200
 
 
-@app.route('/employees/<int:pk>', methods=['PATCH'])
-def partial_update_employee(pk: int) -> Tuple[Response, int]:
-    employee = Employee.query.get(pk)
-    employee_schema = EmployeeSchema()
-    if not employee:
-        abort(404, "An employee doesn't exist.")
-
-    errors = employee_schema.validate(request.json, partial=True)
-    if errors:
-        abort(400, errors)
-
-    update_person(employee, request.json)
-    db.session.commit()
-
-    result = employee_schema.dump(employee)
-
-    return jsonify(result), 200
-
-
 @app.route('/employees/<int:pk>', methods=['DELETE'])
 def destroy_employee(pk: int) -> Tuple[Response, int]:
     employee = Employee.query.get(pk)

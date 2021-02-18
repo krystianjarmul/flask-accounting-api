@@ -115,13 +115,13 @@ def test_update_a_customer_that_not_exists_fails(client):
         'hourly_rate': 12.0
     }
 
-    res = client.patch(detail_url(4), json=payload)
+    res = client.put(detail_url(4), json=payload)
     data = res.get_json()
 
     assert res.status_code == 404
     assert data['error'] == 'Not Found'
     assert data['status'] == '404'
-    assert data['method'] == 'PATCH'
+    assert data['method'] == 'PUT'
     assert data['message'] == "A customer doesn't exist."
     assert data['path'] == "/customers/4"
 
