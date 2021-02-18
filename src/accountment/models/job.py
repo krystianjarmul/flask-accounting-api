@@ -1,18 +1,7 @@
 from datetime import date, time, datetime, timedelta
 from typing import List, Optional
 
-from src.accountment.models import Employee
 from src.accountment import db
-
-assignments = db.Table(
-    'assignments',
-    db.Column('job_id', db.Integer, db.ForeignKey('job.id')),
-    db.Column(
-        'employee_id',
-        db.Integer,
-        db.ForeignKey('employee.id'),
-    )
-)
 
 
 class Job(db.Model):
@@ -25,7 +14,7 @@ class Job(db.Model):
 
     employees = db.relationship(
         'Employee',
-        secondary='assignments',
+        secondary='assignment',
     )
 
     def __init__(

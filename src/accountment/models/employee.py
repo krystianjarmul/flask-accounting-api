@@ -7,7 +7,7 @@ class Employee(db.Model):
 
     jobs = db.relationship(
         'Job',
-        secondary='assignments',
+        secondary='assignment',
         passive_deletes=True,
         lazy='subquery'
     )
