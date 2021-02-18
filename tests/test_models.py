@@ -40,5 +40,13 @@ def test_employee_hours_number():
     job = Job(date(2021, 1, 2), time(11, 30), 2)
     employee = Employee('Anna Testowa')
     assign_employee(job, employee)
-
     assert employee.hours_number == 2
+
+
+def test_employee_payment():
+    job = Job(date(2021, 1, 2), time(11, 30), 2)
+    customer = Customer('Micheal Jordan', 12.0)
+    employee = Employee('Anna Testowa')
+    job.customer = customer
+    assign_employee(job, employee)
+    assert employee.payment == 24.0

@@ -9,7 +9,6 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO dodac logike
 # TODO dodac srodowisko produkcyjne (+ postgres)
 # TODO dodac docker i docker-compose
 # TODO rozwinac readme
@@ -85,5 +84,3 @@ def destroy_customer(pk: int) -> Tuple[Response, int]:
     result = customer_schema.dump(customer)
 
     return jsonify(result), 200
-
-

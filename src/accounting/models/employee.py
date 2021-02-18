@@ -21,5 +21,13 @@ class Employee(db.Model):
             return 0
         return sum(j.hours_per_employee for j in self.jobs)
 
+    @property
+    def payment(self) -> float:
+        if not self.jobs:
+            return 0
+        return sum(
+            j.payment_for_employee for j in self.jobs if j.payment_for_employee
+        )
+
     def __repr__(self) -> str:
         return f'Employee id: {self.id} name: {self.name}'

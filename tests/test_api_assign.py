@@ -112,8 +112,10 @@ def test_reassign_customer_from_job_successfully(client):
 
 
 def test_assign_employee_to_job_successfully(client):
+    customer_id = add_customer('Micheal Jordan', 11.5)
     employee_id = add_employee('Anna Testowa')
     job_id = add_job(date(2021, 1, 1), time(11, 30), 2.5)
+    assign_customer(job_id, customer_id)
     payload = {
         'employee_id': employee_id,
     }
@@ -129,6 +131,7 @@ def test_assign_employee_to_job_successfully(client):
             'id': 1,
             'name': 'Anna Testowa',
             'hours_number': 2.5,
+            'payment': 28.75
         }
     ]
 
@@ -203,6 +206,7 @@ def test_unassign_employee_from_job_successfully(client):
         {
             'id': 2,
             'name': 'Katarzyna Test',
-            'hours_number': 2.5
+            'hours_number': 2.5,
+            'payment': 0
         }
     ]
