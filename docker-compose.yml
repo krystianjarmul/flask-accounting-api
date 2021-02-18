@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: "python manage.py db init && python manage.py db migrate && python manage.py run"
+    command: "python manage.py run"
     volumes:
       - ./src:/app/src
     ports:
