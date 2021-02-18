@@ -6,7 +6,7 @@ from marshmallow import ValidationError
 
 from src.accounting import app, db
 from src.accounting.models import Job, Customer
-from src.accounting.schemas import JobSchema
+from src.accounting.schemas import JobSchema, AssignSchema
 from src.accounting.utils import update_person, update_the_job
 
 
@@ -85,5 +85,24 @@ def destroy_job(pk: int) -> Tuple[Response, int]:
     db.session.commit()
 
     result = job_schema.dump(job)
+
+    return jsonify(result), 200
+
+
+@app.route('/jobs/<int:pk>', methods=['PATCH'])
+def assign_customer(pk: int) -> Tuple[Response, int]:
+    job = Job.query.get(pk)
+    if not job:
+        abort(404, "A job doesn't exist.")
+
+    errors = AssignSchema().validate(request.json)
+    if errors:
+        abort(400, errors)
+
+    job.customer_id = request.json['customer_id']
+    db.session.add(job)
+    db.session.commit()
+
+    result = JobSchema().dump(job)
 
     return jsonify(result), 200
