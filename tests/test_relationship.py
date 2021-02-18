@@ -1,7 +1,7 @@
 from datetime import date, time
 
-from src.accounting import db
-from src.accounting.models import Job, Customer, Employee
+from src.accountment import db
+from src.accountment.models import Job, Customer, Employee
 from .helpers import add_job, add_customer, add_employee, assign_customer, \
     assign_employee
 

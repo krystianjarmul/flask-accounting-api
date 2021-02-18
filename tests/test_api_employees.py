@@ -1,5 +1,5 @@
-from src.accounting.models import Employee
-from src.accounting import db
+from src.accountment.models import Employee
+from src.accountment import db
 from tests.helpers import add_employee
 
 EMPLOYEE_URL = '/employees'

@@ -4,10 +4,10 @@ from typing import Tuple
 from flask import jsonify, request, Response, abort
 from marshmallow import ValidationError
 
-from src.accounting import app, db
-from src.accounting.models import Job, Customer
-from src.accounting.schemas import JobSchema
-from src.accounting.utils import update_person, update_the_job
+from src.accountment import app, db
+from src.accountment.models import Job, Customer
+from src.accountment.schemas import JobSchema
+from src.accountment.utils import update_person, update_the_job
 
 
 @app.route('/jobs', methods=['GET'])

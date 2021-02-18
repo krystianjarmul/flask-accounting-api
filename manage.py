@@ -3,7 +3,7 @@ import os
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
-from src.accounting import app, db
+from src.accountment import app, db
 
 migrate = Migrate(app, db)
 manager = Manager(app)

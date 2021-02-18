@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields
 
-from src.accounting.models import Job
-from src.accounting.schemas import CustomerSchema, EmployeeSchema
+from src.accountment.models import Job
+from src.accountment.schemas import CustomerSchema, EmployeeSchema
 
 
 class JobSchema(Schema):

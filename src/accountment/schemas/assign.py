@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, validates, ValidationError
 
-from src.accounting.models import Customer, Employee
+from src.accountment.models import Customer, Employee
 
 
 class AssignSchema(Schema):

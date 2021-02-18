@@ -1,5 +1,5 @@
 from datetime import date, time
-from src.accounting.models import Job, Employee, Customer
+from src.accountment.models import Job, Employee, Customer
 
 
 def assign_employee(j, e):

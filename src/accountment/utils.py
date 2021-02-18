@@ -1,7 +1,7 @@
 from datetime import date, time
 from typing import Union
 
-from src.accounting.models import Employee, Customer, Job
+from src.accountment.models import Employee, Customer, Job
 
 
 def update_person(person: Union[Employee, Customer], data: dict):

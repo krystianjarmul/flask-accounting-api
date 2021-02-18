@@ -1,8 +1,8 @@
 from datetime import date, time
 from typing import Tuple
 
-from src.accounting import db
-from src.accounting.models import Job, Customer, Employee
+from src.accountment import db
+from src.accountment.models import Job, Customer, Employee
 
 
 def add_job(d: date, st: time, hn: float) -> int:

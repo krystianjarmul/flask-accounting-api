@@ -4,9 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 if app.config['ENV'] == 'testing':
-    app.config.from_object('src.accounting.config.TestingConfig')
+    app.config.from_object('src.accountment.config.TestingConfig')
 else:
-    app.config.from_object('src.accounting.config.DevelopmentConfig')
+    app.config.from_object('src.accountment.config.DevelopmentConfig')
 
 db = SQLAlchemy(app)
 

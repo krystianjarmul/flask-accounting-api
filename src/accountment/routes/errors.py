@@ -1,6 +1,6 @@
 from flask import request, jsonify
 
-from src.accounting import app
+from src.accountment import app
 
 
 @app.errorhandler(404)

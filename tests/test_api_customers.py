@@ -1,5 +1,5 @@
-from src.accounting import db
-from src.accounting.models import Customer
+from src.accountment import db
+from src.accountment.models import Customer
 from tests.helpers import add_customer
 
 CUSTOMER_URL = '/customers'

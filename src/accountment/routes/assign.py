@@ -2,9 +2,9 @@ from typing import Tuple
 
 from flask import request, jsonify, abort, Response
 
-from src.accounting import app, db
-from src.accounting.models import Job, Employee
-from src.accounting.schemas import JobSchema, AssignSchema
+from src.accountment import app, db
+from src.accountment.models import Job, Employee
+from src.accountment.schemas import JobSchema, AssignSchema
 
 
 @app.route('/jobs/<int:pk>', methods=['PATCH'])

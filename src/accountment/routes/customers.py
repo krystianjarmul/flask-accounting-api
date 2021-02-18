@@ -3,10 +3,10 @@ from typing import Tuple
 from flask import jsonify, request, Response, abort
 from marshmallow import ValidationError
 
-from src.accounting import app, db
-from src.accounting.models import Customer
-from src.accounting.schemas import CustomerSchema
-from src.accounting.utils import update_person
+from src.accountment import app, db
+from src.accountment.models import Customer
+from src.accountment.schemas import CustomerSchema
+from src.accountment.utils import update_person
 
 
 # TODO dodac srodowisko produkcyjne (+ postgres)
