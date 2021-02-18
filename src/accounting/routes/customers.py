@@ -9,7 +9,6 @@ from src.accounting.schemas import CustomerSchema
 from src.accounting.utils import update_person
 
 
-# TODO uprosccic przypisywanie do pracy (endpoints)
 # TODO dodac logike
 # TODO dodac srodowisko produkcyjne (+ postgres)
 # TODO dodac docker i docker-compose
