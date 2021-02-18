@@ -37,9 +37,9 @@ class Job(db.Model):
         self.date = date
         self.start_time = start_time
         self.hours_number = hours_number
-        self.end_time = self._get_end_time()
 
-    def _get_end_time(self):
+    @property
+    def end_time(self):
         dt = datetime.combine(self.date, self.start_time) + timedelta(
             hours=int(self.hours_number),
             minutes=int((self.hours_number % 1) * 60)
