@@ -21,6 +21,7 @@ class Job(db.Model):
     date = db.Column(db.Date)
     start_time = db.Column(db.Time)
     hours_number = db.Column(db.Float)
+    end_time = db.Column(db.Time)
 
     employees = db.relationship(
         'Employee',
@@ -44,6 +45,10 @@ class Job(db.Model):
             minutes=int((self.hours_number % 1) * 60)
         )
         return dt.time()
+
+    @property
+    def hours_per_employee(self):
+        return self.hours_number / len(self.employees)
 
     def __repr__(self) -> str:
         return f'Job id: {self.id}'

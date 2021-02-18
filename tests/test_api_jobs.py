@@ -37,6 +37,7 @@ def test_retrieve_a_single_job_successfully(client):
     assert data['date'] == '2021-01-01'
     assert data['start_time'] == '11:30:00'
     assert data['hours_number'] == 2.0
+    assert data['end_time'] == '13:30:00'
 
 
 def test_retrieve_a_single_job_that_not_exists_fails(client):
