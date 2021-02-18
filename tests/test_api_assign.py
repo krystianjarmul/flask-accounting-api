@@ -124,7 +124,13 @@ def test_assign_employee_to_job_successfully(client):
     assert res.status_code == 200
     assert data['id'] == job_id
     assert data['hours_number'] == 2.5
-    assert data['employees'] == [{'id': 1, 'name': 'Anna Testowa'}]
+    assert data['employees'] == [
+        {
+            'id': 1,
+            'name': 'Anna Testowa',
+            'hours_number': 2.5,
+        }
+    ]
 
 
 def test_assign_employee_to_job_when_job_not_exists_fails(client):
@@ -193,4 +199,10 @@ def test_unassign_employee_from_job_successfully(client):
 
     assert res.status_code == 200
     assert data['id'] == job_id
-    assert data['employees'] == [{'id': 2, 'name': 'Katarzyna Test'}]
+    assert data['employees'] == [
+        {
+            'id': 2,
+            'name': 'Katarzyna Test',
+            'hours_number': 2.5
+        }
+    ]

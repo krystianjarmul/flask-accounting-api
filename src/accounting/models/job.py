@@ -48,11 +48,13 @@ class Job(db.Model):
 
     @property
     def hours_per_employee(self):
-        return self.hours_number / len(self.employees)
+        if self.employees:
+            return self.hours_number / len(self.employees)
 
     @property
     def payment_for_employee(self):
-        return self.hours_per_employee * self.customer.hourly_rate
+        if self.customer and self.hours_per_employee:
+            return self.hours_per_employee * self.customer.hourly_rate
 
     def __repr__(self) -> str:
         return f'Job id: {self.id}'
