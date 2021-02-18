@@ -1,4 +1,4 @@
-from datetime import date, time
+from datetime import date, time, datetime, timedelta
 from typing import List
 
 from . import Employee
@@ -36,6 +36,14 @@ class Job(db.Model):
         self.date = date
         self.start_time = start_time
         self.hours_number = hours_number
+        self.end_time = self._get_end_time()
+
+    def _get_end_time(self):
+        dt = datetime.combine(self.date, self.start_time) + timedelta(
+            hours=int(self.hours_number),
+            minutes=int((self.hours_number % 1) * 60)
+        )
+        return dt.time()
 
     def __repr__(self) -> str:
         return f'Job id: {self.id}'
