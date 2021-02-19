@@ -1,7 +1,9 @@
-# flask-accounting-api
+# Short description
 
-Accounting REST API for cleaning service, in progress, using classic Flask aproach
+Accounting REST API for cleaning service made in Python3, using classic Flask aproach
 
+# Requirements
+* Docker
 
 # Usage
 
