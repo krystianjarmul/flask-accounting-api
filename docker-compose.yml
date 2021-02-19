@@ -1,11 +1,31 @@
 version: "3.9"
+
 services:
-  web:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
-    command: "python manage.py run"
+    command: sh -c "python manage.py run"
     volumes:
       - ./src:/app/src
     ports:
       - "5000:5000"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+      - DB_USER=accountment
+      - DB_PASSWORD=accountment123
+      - DB_NAME=accountmentdb
+      - DB_PORT=5432
+      - DB_HOST=db
+      - FLASK_ENV=production
+    depends_on:
+      - db
+  db:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_USER=accountment
+      - POSTGRES_PASSWORD=accountment123
+      - POSTGRES_DB=accountmentdb
+    ports:
+      - "54321:5432"

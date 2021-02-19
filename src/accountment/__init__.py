@@ -5,6 +5,8 @@ app = Flask(__name__)
 
 if app.config['ENV'] == 'testing':
     app.config.from_object('src.accountment.config.TestingConfig')
+elif app.config['ENV'] == 'production':
+    app.config.from_object('src.accountment.config.ProductionConfig')
 else:
     app.config.from_object('src.accountment.config.DevelopmentConfig')
 
