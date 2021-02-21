@@ -8,12 +8,6 @@ from src.accountment.models import Customer
 from src.accountment.schemas import CustomerSchema
 from src.accountment.utils import update_person
 
-# TODO assignment zwraca employee w response
-# TODO dodac srodowisko produkcyjne (+ postgres)
-# TODO dodac docker i docker-compose
-# TODO rozwinac readme
-# TODO dodac swagger
-
 
 @app.route('/customers', methods=['GET'])
 def list_customers() -> Tuple[Response, int]:
